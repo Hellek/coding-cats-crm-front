@@ -1,0 +1,49 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"Images/*": [
+				"./src/assets/images/*"
+			],
+			"Styles/*": [
+				"./src/assets/styles/*"
+			],
+			"Components/*": [
+				"./src/components/*"
+			],
+			"Mixins/*": [
+				"./src/mixins/*"
+			],
+			"Pages/*": [
+				"./src/pages/*"
+			],
+			"Plugins/*": [
+				"./src/plugins/*"
+			],
+			"Utils/*": [
+				"./src/utils/*"
+			],
+			"KitComponents/*": [
+				"./node_modules/element-ui-kit/src/components/*"
+			],
+			"KitDirectives/*": [
+				"./node_modules/element-ui-kit/src/directives/*"
+			],
+			"KitIcons/*": [
+				"./node_modules/element-ui-kit/src/icons/*"
+			],
+			"KitMixins/*": [
+				"./node_modules/element-ui-kit/src/mixins/*"
+			],
+			"KitPlugins/*": [
+				"./node_modules/element-ui-kit/src/plugins/*"
+			],
+			"KitStyles/*": [
+				"./node_modules/element-ui-kit/src/styles/*"
+			],
+			"KitUtils/*": [
+				"./node_modules/element-ui-kit/src/utils/*"
+			]
+		}
+	}
+}

@@ -1,0 +1,12 @@
+{
+	"editor.tabSize": 3,
+	"editor.fontSize": 13,
+	"editor.insertSpaces": false,
+	"editor.autoIndent": true,
+	"editor.renderWhitespace": "none",
+	"editor.tabCompletion": "on",
+	"files.autoGuessEncoding": true,
+	"files.trimTrailingWhitespace": true,
+	"files.eol": "\n",
+	"files.trimFinalNewlines": true,
+}
