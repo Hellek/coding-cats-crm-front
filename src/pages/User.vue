@@ -159,7 +159,7 @@ export default {
 
 				if (this.isCreationView) {
 					this.$router.replace({
-						path: `/user/${this.user.id}`,
+						path: `/users/${this.user.id}`,
 					})
 				}
 			} catch (error) {
