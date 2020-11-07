@@ -11,10 +11,14 @@
 			class="p-3"
 		>{{ nav.meta.label }}</router-link>
 
+		<ThemeSwitcher
+			class="mx-3"
+		/>
+
 		<el-button
-			type="text"
-			size="medium"
-			class="p-3 text-left"
+			type="primary"
+			plain
+			class="mx-3 mt-3"
 			@click="$store.dispatch('users/unauthorize')"
 		>Выход</el-button>
 	</div>
@@ -23,6 +27,9 @@
 <script>
 export default {
 	name: 'LayoutSidebarNav',
+	components: {
+		ThemeSwitcher: () => import('./ThemeSwitcher'),
+	},
 	data() {
 		return {
 			navs: [],
