@@ -13,14 +13,14 @@
 				shadow="never"
 			>
 				<div
-					v-for="(message, i) in chat.messages"
+					v-for="(message, i) in messages"
 					:key="i"
 					:class="{'mt-4': i > 0}"
 				>
 					<div
 						class="font-bold mb-2"
 					>
-						<span class="mr-1">{{ message.user }}</span>
+						<span class="mr-1">{{ message.user.firstname }}</span>
 						<span class="font-semi-bold font-size-small color-placeholder">{{ message.time }}</span>
 					</div>
 
@@ -48,14 +48,7 @@ export default {
 	data() {
 		return {
 			messageText: '',
-			chat: {
-				messages: [
-					{ user: 'Роман', text: 'Привет ❤️, пойдём сегодня в кино?', time: '11:45' },
-					{ user: 'Александра', text: 'Да, с удовольствием)', time: '11:45' },
-					{ user: 'Роман', text: 'Заеду за тобой в 17:00)', time: '11:46' },
-					{ user: 'Александра', text: 'Буду ждать с нетерпением 🐱', time: '11:47' },
-				],
-			},
+			messages: [],
 		}
 	},
 	computed: {
@@ -63,17 +56,34 @@ export default {
 			user: state => state.users.user,
 		}),
 	},
+	created() {
+		this.$socket.client.emit('chat/user-credentials', this.user)
+
+		this.$socket.$subscribe('chat', data => {
+			this.messages.push({
+				...data,
+				time: this.$dayjs(data.time).format('HH:mm'),
+			})
+		})
+
+		this.$socket.$subscribe('chat/user/connect', user => {
+			this.$notify.success({
+				title: `${user.firstname} присоединяется к чату`,
+			})
+		})
+
+		this.$socket.$subscribe('chat/user/disconnect', user => {
+			this.$notify.success({
+				title: `${user.firstname} покидает чат`,
+			})
+		})
+	},
 	mounted() {
 		this.$refs.message.focus()
 	},
 	methods: {
 		send() {
-			this.chat.messages.push({
-				user: this.user.firstname,
-				text: this.messageText,
-				time: this.$dayjs().format('HH:mm'),
-			})
-
+			this.$socket.client.emit('chat', this.messageText)
 			this.messageText = ''
 		},
 	},
