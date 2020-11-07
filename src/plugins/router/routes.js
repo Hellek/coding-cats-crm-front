@@ -10,6 +10,15 @@ export default [
 		},
 	},
 	{
+		name: 'RestTest',
+		path: '/rest-test',
+		component: () => import('Pages/RestTest'),
+		meta: {
+			isNav: true,
+			label: 'RestTest',
+		},
+	},
+	{
 		name: 'Roles',
 		path: '/roles',
 		component: () => import('Pages/Roles'),
