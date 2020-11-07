@@ -26,11 +26,15 @@ body.dark-theme {
 	&, .el-card, .el-input__inner, .el-textarea__inner, .is-plain {
 		background: #222933;
 		color: #eee;
-		border: 1px solid rgba(235, 238, 245, 0.2);
+		border-color: rgba(235, 238, 245, 0.2);
 	}
 
 	h1, h2, h3, h4, h5, h6 {
 		color: #eee;
+	}
+
+	.shadow-light {
+		box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 60%);
 	}
 }
 </style>
