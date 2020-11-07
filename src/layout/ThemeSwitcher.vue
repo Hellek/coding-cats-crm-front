@@ -32,6 +32,10 @@ body.dark-theme {
 		color: #eee;
 	}
 
+	.el-notification__title {
+		color: #222933;
+	}
+
 	.shadow-light {
 		box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 60%);
 	}
