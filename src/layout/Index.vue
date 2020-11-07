@@ -27,16 +27,5 @@ export default {
 			isAuthorized: state => state.users.isAuthorized,
 		}),
 	},
-	created() {
-		// this.$store.dispatch('users/setInitials')
-	},
-	sockets: {
-		connect() {
-			console.log('socket connected')
-		},
-		customEmit() {
-			console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
-		},
-	},
 }
 </script>
