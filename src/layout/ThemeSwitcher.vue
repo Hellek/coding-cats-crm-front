@@ -1,7 +1,6 @@
 <template>
 	<el-button
-		type="primary"
-		plain
+		type="text"
 		@click="switchTheme"
 	>Switch Theme</el-button>
 </template>
