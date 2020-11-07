@@ -10,6 +10,15 @@ export default [
 		},
 	},
 	{
+		name: 'Chat',
+		path: '/chat',
+		component: () => import('Pages/Chat'),
+		meta: {
+			isNav: true,
+			label: 'Чат',
+		},
+	},
+	{
 		name: 'RestTest',
 		path: '/rest-test',
 		component: () => import('Pages/RestTest'),
