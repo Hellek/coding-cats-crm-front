@@ -1,12 +1,13 @@
 <template>
 	<ElCard id="auth-form">
 		<ElInput
-			v-model="form.login"
-			placeholder="Логин"
+			v-model="form.email"
+			placeholder="Email"
 			class="mb-4"
 		/>
 		<ElInput
 			v-model="form.password"
+			show-password
 			placeholder="Пароль"
 			class="mb-4"
 		/>
@@ -24,8 +25,8 @@ export default {
 	data() {
 		return {
 			form: {
-				login: 'my@hellek.ru',
-				password: '111',
+				email: '',
+				password: '',
 			},
 		}
 	},
