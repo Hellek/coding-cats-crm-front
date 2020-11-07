@@ -1,13 +1,14 @@
 <template>
 	<div class="min-h-100vh d-flex">
 		<LayoutAuthForm v-if="!isAuthorized"/>
-		<template v-else>
-			<LayoutSidebar/>
-			<div class="d-flex flex-column flex-grow">
-				<!-- <LayoutHeader/> -->
-				<LayoutMain/>
-			</div>
-		</template>
+
+		<div
+			v-else
+			class="d-flex flex-column flex-grow"
+		>
+			<LayoutHeader/>
+			<LayoutMain/>
+		</div>
 	</div>
 </template>
 
@@ -18,8 +19,7 @@ export default {
 	name: 'Layout',
 	components: {
 		LayoutAuthForm: () => import('./LayoutAuthForm'),
-		LayoutSidebar: () => import('./LayoutSidebar'),
-		// LayoutHeader: () => import('./LayoutHeader'),
+		LayoutHeader: () => import('./LayoutHeader'),
 		LayoutMain: () => import('./LayoutMain'),
 	},
 	computed: {
