@@ -7,14 +7,29 @@
 
 		<el-card
 			v-else
+			:body-style="{ padding: '12px 20px 20px' }"
 			class="w-100p"
 		>
+			<div>
+				<span class="mr-1">В чате: </span>
+
+				<el-tag
+					v-for="chatUser in chatUsers"
+					:key="chatUser.id"
+					type="success"
+					size="mini"
+					effect="dark"
+					class="mr-3 mb-3"
+				>{{ chatUser.firstname }}</el-tag>
+
+
+			</div>
 			<el-card
 				ref="messagesCard"
 				shadow="never"
 				:style="{
 					'overflow-y': 'scroll',
-					height: 'calc(100vh - 180px)',
+					height: 'calc(100vh - 200px)',
 				}"
 			>
 				<div
@@ -54,6 +69,7 @@ export default {
 		return {
 			messageText: '',
 			messages: [],
+			chatUsers: {},
 		}
 	},
 	watch: {
