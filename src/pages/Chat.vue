@@ -52,6 +52,7 @@
 				<el-input
 					ref="message"
 					v-model="messageText"
+					v-disable-composition
 					placeholder="Введите текст"
 					@keyup.enter.native="send"
 				/>
@@ -62,9 +63,13 @@
 
 <script>
 import { mapState } from 'vuex'
+import DisableComposition from 'KitDirectives/DisableComposition'
 
 export default {
 	name: 'Chat',
+	directives: {
+		DisableComposition,
+	},
 	data() {
 		return {
 			messageText: '',
