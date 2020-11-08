@@ -9,8 +9,9 @@
 export default {
 	name: 'ThemeSwitcher',
 	created() {
-		const isDarkThemeTime = !(this.$dayjs().startOf('day').add(11, 'hour').toDate() < this.$dayjs() && this.$dayjs() < this.$dayjs().startOf('day').add(18, 'hour'))
-		if (isDarkThemeTime) this.switchTheme()
+		// const isDarkThemeTime = !(this.$dayjs().startOf('day').add(11, 'hour').toDate() < this.$dayjs() && this.$dayjs() < this.$dayjs().startOf('day').add(18, 'hour'))
+		// if (isDarkThemeTime) this.switchTheme()
+		this.switchTheme()
 	},
 	methods: {
 		switchTheme() {
