@@ -1,10 +1,9 @@
 const KitVueConfigs = require('./node_modules/element-ui-kit/vue.configs')
 
 module.exports = {
-	transpileDependencies: [
-		'element-ui-kit',
-	],
+	...KitVueConfigs.vueConfig,
 	configureWebpack: {
+		...KitVueConfigs.vueConfig.configureWebpack,
 		resolve: {
 			alias: {
 				ScssVariables: '@/assets/styles/variables.scss',
@@ -13,7 +12,5 @@ module.exports = {
 				}),
 			},
 		},
-		devServer: KitVueConfigs.configureWebpack.devServer,
 	},
-	pluginOptions: KitVueConfigs.pluginOptions,
 }
