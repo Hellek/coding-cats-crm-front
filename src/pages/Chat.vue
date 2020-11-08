@@ -136,6 +136,7 @@ export default {
 	},
 	methods: {
 		send() {
+			if (!this.messageText.trim()) return
 			this.$socket.client.emit('chat', this.messageText)
 			this.messageText = ''
 		},
