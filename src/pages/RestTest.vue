@@ -166,6 +166,7 @@ export default {
 
 				this.result = await this.$http[method.toLowerCase()](query, secondParam)
 			} catch (error) {
+				// eslint-disable-next-line no-console
 				console.log(error)
 
 				if (error.response) {

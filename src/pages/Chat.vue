@@ -77,6 +77,11 @@ export default {
 			chatUsers: {},
 		}
 	},
+	computed: {
+		...mapState({
+			user: state => state.users.user,
+		}),
+	},
 	watch: {
 		'$socket.connected': {
 			immediate: true,
@@ -88,11 +93,6 @@ export default {
 				}
 			},
 		},
-	},
-	computed: {
-		...mapState({
-			user: state => state.users.user,
-		}),
 	},
 	created() {
 		// При выходе из компонента отключаемся вручную, нужно и подключиться
