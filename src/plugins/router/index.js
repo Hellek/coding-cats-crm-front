@@ -10,4 +10,3 @@ const router = KitRouter.create(Router, routes)
 export default router
 
 KitRouter.ifEmptyPathRedirectToHomePage()
-KitRouter.documentTitleDefaultOrCustom()
