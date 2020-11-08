@@ -15,14 +15,24 @@ export default {
 	},
 	methods: {
 		switchTheme() {
-			document.body.classList.toggle('dark-theme')
+			document.documentElement.classList.toggle('dark-theme')
 		},
 	},
 }
 </script>
 
 <style lang="scss">
-body.dark-theme {
+@import 'ScssVariables';
+
+html.dark-theme {
+	::-webkit-scrollbar-track {
+		background-color: rgba(235, 238, 245, 0.075);
+	}
+
+	::-webkit-scrollbar-thumb {
+		background-color: rgba(235, 238, 245, 0.1);
+	}
+
 	&, .el-card, .el-input__inner, .el-textarea__inner, .is-plain {
 		background: #222933;
 		color: #eee;
