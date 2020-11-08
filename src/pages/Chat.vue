@@ -10,7 +10,12 @@
 			class="w-100p"
 		>
 			<el-card
+				ref="messagesCard"
 				shadow="never"
+				:style="{
+					'overflow-y': 'scroll',
+					height: 'calc(100vh - 180px)',
+				}"
 			>
 				<div
 					v-for="(message, i) in messages"
@@ -64,6 +69,13 @@ export default {
 				...data,
 				time: this.$dayjs(data.time).format('HH:mm'),
 			})
+
+			if (this.$refs.messagesCard) {
+				this.$nextTick(() => {
+					const el = this.$refs.messagesCard.$el.querySelector('.el-card__body')
+					this.$refs.messagesCard.$el.scrollTo(0, el.offsetHeight)
+				})
+			}
 		})
 
 		this.$socket.$subscribe('chat/user/connect', user => {
