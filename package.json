@@ -12,6 +12,8 @@
 		"lint": "vue-cli-service lint",
 		"lint:style": "vue-cli-service lint:style",
 		"npm:install": "npm install",
+		"heroku:deploy": "git push heroku master",
+		"heroku:logs": "heroku logs --tail",
 		"tool:get-latest-vscode-snippets": "node node_modules/element-ui-kit/tools/get-latest-vscode-snippets.js"
 	},
 	"dependencies": {
