@@ -56,6 +56,18 @@ export default {
 			messages: [],
 		}
 	},
+	watch: {
+		'$socket.connected': {
+			immediate: true,
+			handler(connected) {
+				if (connected) {
+					this.$nextTick(() => {
+						this.$refs.message.focus()
+					})
+				}
+			},
+		},
+	},
 	computed: {
 		...mapState({
 			user: state => state.users.user,
@@ -89,9 +101,6 @@ export default {
 				title: `${user.firstname} покидает чат`,
 			})
 		})
-	},
-	mounted() {
-		this.$refs.message.focus()
 	},
 	methods: {
 		send() {
