@@ -90,12 +90,32 @@ export default {
 		}),
 	},
 	created() {
-		this.$socket.client.emit('chat/user-credentials', this.user)
+		// При выходе из компонента отключаемся вручную, нужно и подключиться
+		if (this.$socket.disconnected) this.$socket.client.connect()
 
-		this.$socket.$subscribe('chat', data => {
+		// Подписываемся на обновление списка участников чата
+		this.$socket.$subscribe('chat/users/update', chatUsers => {
+			this.chatUsers = chatUsers
+		})
+
+		// Однократно получаем список сообщений
+		this.$socket.$subscribe('chat/messages/update', messages => {
+			this.messages = messages.map(message => ({
+				...message,
+				time: this.$dayjs(message.time).format('HH:mm'),
+			}))
+
+			this.$socket.$unsubscribe('chat/messages/update')
+		})
+
+		// Однократно отправляем данные о нас
+		this.$socket.client.emit('chat/user/join', this.user)
+
+		// Подписываемя на сообщения
+		this.$socket.$subscribe('chat', message => {
 			this.messages.push({
-				...data,
-				time: this.$dayjs(data.time).format('HH:mm'),
+				...message,
+				time: this.$dayjs(message.time).format('HH:mm'),
 			})
 
 			if (this.$refs.messagesCard) {
@@ -105,18 +125,9 @@ export default {
 				})
 			}
 		})
-
-		this.$socket.$subscribe('chat/user/connect', user => {
-			this.$notify.success({
-				title: `${user.firstname} присоединяется к чату`,
-			})
-		})
-
-		this.$socket.$subscribe('chat/user/disconnect', user => {
-			this.$notify.success({
-				title: `${user.firstname} покидает чат`,
-			})
-		})
+	},
+	beforeDestroy() {
+		this.$socket.client.disconnect()
 	},
 	methods: {
 		send() {
