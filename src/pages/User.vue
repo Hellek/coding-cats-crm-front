@@ -4,27 +4,41 @@
 			ref="form"
 			:model="user"
 			:rules="rules"
-			style="max-width: 260px;"
+			inline
+			label-position="top"
 		>
 			<el-form-item label="Имя">
 				<el-input v-model="user.firstName"/>
 			</el-form-item>
+
 			<el-form-item label="Фамилия">
 				<el-input v-model="user.lastName"/>
 			</el-form-item>
+
 			<el-form-item label="Емейл" prop="email">
 				<el-input v-model="user.email"/>
 			</el-form-item>
-			<el-form-item v-if="isCreationView" label="Пароль">
-				<el-input :value="user.password"/>
+
+			<el-form-item
+				v-if="isCreationView"
+				label="Пароль"
+				prop="password"
+			>
+				<el-input
+					v-model="user.password"
+					show-password
+				/>
 			</el-form-item>
+
 			<el-form-item label="Телефон">
 				<InputPhone v-model="user.phone" format="ru"/>
 			</el-form-item>
-			<el-form-item v-if="!isCreationView" label="Зарегистрирован">
+
+			<!-- <el-form-item v-if="!isCreationView" label="Зарегистрирован">
 				<el-input :value="toDateTimeFormat(user.registered)" disabled/>
-			</el-form-item>
-			<el-form-item label="Роль">
+			</el-form-item> -->
+
+			<!-- <el-form-item label="Роль">
 				<el-select
 					v-model="user.role"
 					:disabled="isInitialUser"
@@ -37,22 +51,20 @@
 						:value="role.id"
 					/>
 				</el-select>
-			</el-form-item>
+			</el-form-item> -->
+
 			<el-form-item label="Активен">
 				<el-select
 					v-model="user.active"
 					:disabled="isInitialUser"
-					class="w-100p"
 				>
-					<el-option
-						v-for="role in activeStatusList"
-						:key="role.value"
-						:label="role.label"
-						:value="role.value"
-					/>
+					<el-option label="Да" :value="true"/>
+					<el-option label="Нет" :value="false"/>
 				</el-select>
 			</el-form-item>
+		</el-form>
 
+		<div>
 			<el-button
 				type="primary"
 				@click="updateOrSave"
@@ -63,14 +75,11 @@
 				:disabled="isInitialUser"
 				@click="removeUser"
 			>Удалить</el-button>
-		</el-form>
+		</div>
 	</div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import { toDateTimeFormat } from 'Utils'
-
 export default {
 	name: 'User',
 	components: {
@@ -84,48 +93,38 @@ export default {
 				lastName: '',
 				password: '',
 				phone: '',
-				role: 2,
-				active: 0,
+				active: true,
 			},
 			rules: {
 				email: [
-					{ type: 'email', message: 'Поле содержит опечатки', trigger: 'change' },
+					{ required: true, message: 'Поле обязательно', trigger: 'change' },
+					{ type: 'email', message: 'Email содержит опечатки', trigger: 'change' },
+				],
+				password: [
+					{ required: true, message: 'Поле обязательно', trigger: 'change' },
 				],
 			},
 		}
 	},
 	computed: {
-		...mapState({
-			roles: state => state.roles.list,
-			activeStatusList: state => state.users.activeStatusList,
-		}),
 		userId() {
 			return this.$route.params.id
 		},
 		isCreationView() {
-			return this.userId === 'creation'
+			return !this.userId
 		},
 		isInitialUser() {
-			return this.user.id === 1
-		},
-		title() {
-			return this.isCreationView ? 'Создание пользователя' : `${this.$route.meta.label} №${this.userId}`
+			return this.userId === 1
 		},
 	},
 	created() {
-		this.fetchRoles()
-
-		if (!this.isCreationView) {
-			this.getUser()
-		} else {
+		if (this.isCreationView) {
 			this.user.password = this.generatePassword()
+		} else {
+			this.getUser()
 		}
 	},
 	methods: {
-		toDateTimeFormat,
-		...mapActions({
-			fetchRoles: 'roles/fetchRoles',
-		}),
 		async getUser() {
 			this.user = (await this.$http.get(`/users/${this.userId}`)).data
 		},
@@ -147,16 +146,18 @@ export default {
 				if (this.isCreationView) {
 					this.user.id = (await this.$http.post('/users', this.user)).data
 				} else {
-					await this.$http.put('/users', this.user)
+					await this.$http.put(`/users/${this.userId}`, this.user)
 				}
 
 				this.$notify.success({
-					title: this.isCreationView ? 'Пользователь создан' : 'Пользователь сохранен',
+					title: `Пользователь ${this.isCreationView ? 'создан' : 'сохранен'}`,
 				})
 
 				if (this.isCreationView) {
 					this.$router.replace({
-						path: `/users/${this.user.id}`,
+						params: {
+							id: this.user.id,
+						},
 					})
 				}
 			} catch (error) {
@@ -165,7 +166,13 @@ export default {
 		},
 		async removeUser() {
 			try {
-				await this.$http.delete(`/users/${this.user.id}`)
+				await this.$confirm('Данные будут удалены. Вы уверены?', {
+					confirmButtonText: 'Да',
+					cancelButtonText: 'Нет',
+					type: 'warning',
+				})
+
+				await this.$http.delete(`/users/${this.userId}`)
 
 				this.$router.push({ name: 'Users' })
 
@@ -173,6 +180,7 @@ export default {
 					title: 'Пользователь удален',
 				})
 			} catch (error) {
+				if (error === 'cancel') return
 				this.$notifyUserAboutError(error)
 			}
 		},

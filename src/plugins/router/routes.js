@@ -55,7 +55,7 @@ export default [
 	},
 	{
 		name: 'User',
-		path: '/user/:id',
+		path: '/user/:id?',
 		component: () => import('Pages/User'),
 		meta: {
 			label: 'Пользователь',
