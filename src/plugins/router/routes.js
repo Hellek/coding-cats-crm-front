@@ -32,7 +32,7 @@ export default [
 		path: '/roles',
 		component: () => import('Pages/Roles'),
 		meta: {
-			isNav: true,
+			// isNav: true,
 			label: 'Роли',
 		},
 	},
