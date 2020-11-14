@@ -44,7 +44,10 @@
 			</el-card>
 		</div>
 
-		<el-card class="flex-1">
+		<el-card
+			v-loading="isSending"
+			class="flex-1"
+		>
 			<div
 				v-if="result.status"
 				class="font-semi-bold d-inline-block px-4 py-2 border-radius-base"
@@ -56,14 +59,17 @@
 </template>
 
 <script>
+const getDefaultResult = () => ({
+	data: null,
+	status: null,
+})
+
 export default {
 	name: 'RestTest',
 	data() {
 		return {
-			result: {
-				data: null,
-				status: null,
-			},
+			isSending: false,
+			result: getDefaultResult(),
 			api: [
 				{
 					title: 'Auth',
@@ -157,6 +163,9 @@ export default {
 	},
 	methods: {
 		async send({ query, method = 'GET', body }) {
+			this.isSending = true
+			this.result = getDefaultResult()
+
 			try {
 				let secondParam = null
 
@@ -176,6 +185,8 @@ export default {
 
 				this.result.data = error
 				this.result.status = 'XXX'
+			} finally {
+				this.isSending = false
 			}
 		},
 		getButtonMethodType(method) {
