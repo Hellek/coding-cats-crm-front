@@ -23,6 +23,9 @@
 			"Utils/*": [
 				"./src/utils/*"
 			],
+			"Helpers/*": [
+				"./src/helpers/*"
+			],
 			"KitComponents/*": [
 				"./node_modules/element-ui-kit/src/components/*"
 			],
