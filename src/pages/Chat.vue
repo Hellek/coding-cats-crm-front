@@ -21,7 +21,7 @@
 					size="mini"
 					effect="dark"
 					class="mr-3 mb-3"
-				>{{ chatUser.firstname }}</el-tag>
+				>{{ chatUser.firstName }}</el-tag>
 			</div>
 
 			<el-card
@@ -40,7 +40,7 @@
 					<div
 						class="font-bold mb-2"
 					>
-						<span class="mr-1">{{ message.user.firstname }}</span>
+						<span class="mr-1">{{ message.user.firstName }}</span>
 						<span class="font-semi-bold font-size-small color-placeholder">{{ message.time }}</span>
 					</div>
 
