@@ -1,5 +1,5 @@
 <template>
-	<header class="d-flex justify-content-between align-items-center py-1 px-5 shadow-light flex-wrap">
+	<header class="d-flex justify-content-between align-items-center py-1 px-5 shadow-hard flex-wrap">
 		<LayoutNav/>
 
 		<div>

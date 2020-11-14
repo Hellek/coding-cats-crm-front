@@ -33,42 +33,41 @@ export default {
 <style lang="scss">
 @import 'ScssVariables';
 
-html.dark-theme {
-	::-webkit-scrollbar-track {
-		background-color: rgba(235, 238, 245, 0.075);
-	}
+::-webkit-scrollbar-track {
+	background-color: rgba(235, 238, 245, 0.075);
+}
 
-	::-webkit-scrollbar-thumb {
-		background-color: rgba(235, 238, 245, 0.1);
-	}
+::-webkit-scrollbar-thumb {
+	background-color: rgba(235, 238, 245, 0.1);
+}
 
-	&, .el-card, .el-input__inner, .el-textarea__inner, .is-plain {
-		background: #222933;
-		color: #eee;
-		border-color: rgba(235, 238, 245, 0.2);
-	}
+html,
+.el-card,
+.el-table tr,
+.el-input__inner,
+.el-textarea__inner,
+.is-plain {
+	background: #222933;
+	color: #eee;
+	border-color: rgba(235, 238, 245, 0.2);
+}
 
-	h1, h2, h3, h4, h5, h6 {
-		color: #eee;
-	}
+h1, h2, h3, h4, h5, h6 {
+	color: #eee;
+}
 
-	.el-notification__title {
-		color: #222933;
-	}
+.shadow-hard {
+	box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 60%);
+}
 
-	.shadow-light {
-		box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 60%);
-	}
+.el-loading-mask {
+	background-color: unset;
+	animation: glow linear $--transition-base-duration * 7 infinite;
+}
 
-	.el-loading-mask {
-		background-color: unset;
-		animation: glow linear $--transition-base-duration * 7 infinite;
-	}
-
-	@keyframes glow {
-		0% { background-color: none }
-		50% { background-color: rgba(0, 0, 0, 0.7) }
-		100% { background-color: none }
-	}
+@keyframes glow {
+	0% { background-color: none }
+	50% { background-color: rgba(0, 0, 0, 0.7) }
+	100% { background-color: none }
 }
 </style>

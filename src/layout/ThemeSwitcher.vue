@@ -47,7 +47,7 @@ html.dark-theme {
 		color: #222933;
 	}
 
-	.shadow-light {
+	.shadow-hard {
 		box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 60%);
 	}
 }
