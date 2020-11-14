@@ -36,6 +36,9 @@ export default {
 
 <style lang="scss">
 #layout-sidebar-nav {
-	// router-link-exact-active router-link-active
+	.router-link-active {
+		color: white;
+		text-decoration: underline;
+	}
 }
 </style>
