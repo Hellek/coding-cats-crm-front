@@ -1,17 +1,18 @@
 <template>
 	<div class="d-flex">
 		<div
-			v-if="$socket.disconnected"
+			v-if="$socket.disconnected && !isConnecting"
 			class="color-danger font-semi-bold"
-		>Подключение отсутствует</div>
+		>Не удалось установить соединение, попробуйте позже</div>
 
 		<el-card
 			v-else
+			v-loading="isConnecting"
 			:body-style="{ padding: '12px 20px 20px' }"
 			class="w-100p"
 		>
 			<div>
-				<span class="mr-1">В чате: </span>
+				<div class="d-inline-block mr-3 mb-3">В чате: </div>
 
 				<el-tag
 					v-for="chatUser in chatUsers"
@@ -21,9 +22,8 @@
 					effect="dark"
 					class="mr-3 mb-3"
 				>{{ chatUser.firstname }}</el-tag>
-
-
 			</div>
+
 			<el-card
 				ref="messagesCard"
 				shadow="never"
@@ -72,6 +72,7 @@ export default {
 	},
 	data() {
 		return {
+			isConnecting: true,
 			messageText: '',
 			messages: [],
 			chatUsers: {},
@@ -87,6 +88,8 @@ export default {
 			immediate: true,
 			handler(connected) {
 				if (connected) {
+					this.isConnecting = false
+
 					this.$nextTick(() => {
 						this.$refs.message.focus()
 					})
@@ -96,7 +99,14 @@ export default {
 	},
 	created() {
 		// При выходе из компонента отключаемся вручную, нужно и подключиться
-		if (this.$socket.disconnected) this.$socket.client.connect()
+		if (this.$socket.disconnected) {
+			this.isConnecting = true
+			this.$socket.client.connect()
+		}
+
+		this.$socket.client.io.on('reconnect_failed', () => {
+			this.isConnecting = false
+		})
 
 		// Подписываемся на обновление списка участников чата
 		this.$socket.$subscribe('chat/users/update', chatUsers => {
