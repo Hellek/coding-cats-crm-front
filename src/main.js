@@ -24,6 +24,9 @@ Vue.use(KitPlugins)
 if (process.env.VUE_APP_HAS_WEBSOCKET_SERVICE === 'true') {
 	const socket = io(process.env.VUE_APP_URL_API, {
 		transports: ['websocket'],
+		autoConnect: false,
+		reconnectionAttempts: 2,
+		reconnectionDelay: 300,
 	})
 
 	Vue.use(VueSocketIOExt, socket/* , { store } */)
