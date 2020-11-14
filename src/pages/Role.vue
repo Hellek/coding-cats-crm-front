@@ -1,7 +1,5 @@
 <template>
 	<div>
-		<GoBackTitle :title="title"/>
-
 		<el-alert
 			v-if="isDefaultRole"
 			:title="`«${role.label}» стандартная роль, её изменение невозможно`"
@@ -57,9 +55,6 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
 	name: 'User',
-	components: {
-		GoBackTitle: () => import('Components/GoBackTitle'),
-	},
 	data() {
 		return {
 			role: {

@@ -1,7 +1,5 @@
 <template>
 	<div>
-		<GoBackTitle :title="$route.meta.label"/>
-
 		<router-link to="/role/creation">Создать роль</router-link>
 
 		<el-table
@@ -24,9 +22,6 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
 	name: 'Roles',
-	components: {
-		GoBackTitle: () => import('Components/GoBackTitle'),
-	},
 	computed: {
 		...mapState({
 			roles: state => state.roles.list,

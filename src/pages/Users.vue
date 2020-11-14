@@ -1,7 +1,5 @@
 <template>
 	<div>
-		<GoBackTitle :title="$route.meta.label"/>
-
 		<router-link to="/user/creation">Создать пользователя</router-link>
 
 		<el-table
@@ -30,9 +28,6 @@ import { toDateTimeFormat } from 'Utils'
 
 export default {
 	name: 'Users',
-	components: {
-		GoBackTitle: () => import('Components/GoBackTitle'),
-	},
 	data() {
 		return {
 			users: [],

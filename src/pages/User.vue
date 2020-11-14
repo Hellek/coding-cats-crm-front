@@ -1,7 +1,5 @@
 <template>
 	<div>
-		<GoBackTitle :title="title"/>
-
 		<el-form
 			ref="form"
 			:model="user"
@@ -76,7 +74,6 @@ import { toDateTimeFormat } from 'Utils'
 export default {
 	name: 'User',
 	components: {
-		GoBackTitle: () => import('Components/GoBackTitle'),
 		InputPhone: () => import('KitComponents/InputPhone'),
 	},
 	data() {
