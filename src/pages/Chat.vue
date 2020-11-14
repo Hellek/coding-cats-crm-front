@@ -91,7 +91,7 @@ export default {
 					this.isConnecting = false
 
 					this.$nextTick(() => {
-						this.$refs.message.focus()
+						if (this.$refs.message) this.$refs.message.focus()
 					})
 				}
 			},
@@ -120,7 +120,7 @@ export default {
 				time: this.$dayjs(message.time).format('HH:mm'),
 			}))
 
-			this.$socket.$unsubscribe('chat/messages/update')
+			if (this.$socket.$unsubscribe) this.$socket.$unsubscribe('chat/messages/update')
 		})
 
 		// Однократно отправляем данные о нас
