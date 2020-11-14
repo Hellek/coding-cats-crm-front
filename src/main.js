@@ -18,7 +18,7 @@ Vue.use($dayjs)
 Vue.use($http)
 // Vue.use(KitComponents)
 Vue.use(Styles)
-Vue.use(ElementUi, { locale, size: 'small' })
+Vue.use(ElementUi, { locale, size: 'mini' })
 Vue.use(KitPlugins)
 
 if (process.env.VUE_APP_HAS_WEBSOCKET_SERVICE === 'true') {

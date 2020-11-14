@@ -1,73 +1,58 @@
 <template>
 	<div>
-		<router-link to="/user/creation">Создать пользователя</router-link>
+		<router-link :to="{ name: 'User' }">Создать пользователя</router-link>
 
 		<el-table
 			:data="users"
 			stripe
+			class="mt-4"
 		>
-			<el-table-column prop="id" label="ID">
+			<el-table-column label="ID">
 				<router-link
 					slot-scope="scope"
-					:to="`/user/${scope.row.id}`"
-				>{{ scope.row.id }}</router-link>
+					:to="{ name: 'User', params: { id: scope.row.id } }"
+				>
+					<el-button
+						plain
+						size="mini"
+					>{{ scope.row.id }}</el-button>
+				</router-link>
 			</el-table-column>
+
 			<el-table-column
 				v-for="col in tableColumns"
 				:key="col.prop"
 				:prop="col.prop"
 				:label="col.label"
 			/>
+
+			<el-table-column label="Активен">
+				<template slot-scope="scope">{{ scope.row.active ? 'Да' : 'Нет' }}</template>
+			</el-table-column>
 		</el-table>
 	</div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import { toDateTimeFormat } from 'Utils'
+import { setUsers } from 'Mixins/setMixins'
 
 export default {
 	name: 'Users',
+	mixins: [
+		setUsers,
+	],
 	data() {
 		return {
-			users: [],
 			tableColumns: [
 				{ prop: 'firstName', label: 'Имя' },
 				{ prop: 'lastName', label: 'Фамилия' },
 				{ prop: 'phone', label: 'Телефон' },
 				{ prop: 'email', label: 'Почта' },
-				{ prop: 'registered', label: 'Зарегистрирован' },
-				{ prop: 'role.label', label: 'Роль' },
-				{ prop: 'active.label', label: 'Активен' },
 			],
 		}
 	},
-	computed: {
-		...mapState({
-			roles: state => state.roles.list,
-			activeStatusList: state => state.users.activeStatusList,
-		}),
-	},
-	created() {
-		this.fetchRoles()
-		this.getUsers()
-	},
-	methods: {
-		toDateTimeFormat,
-		...mapActions({
-			fetchRoles: 'roles/fetchRoles',
-		}),
-		async getUsers() {
-			const users = (await this.$http.get('/users/list')).data
-
-			this.users = users.map(user => {
-				user.role = this.roles[user.role]
-				user.active = this.activeStatusList[user.active]
-				user.registered = this.toDateTimeFormat(user.registered)
-
-				return user
-			})
-		},
+	async created() {
+		await this.setUsers()
 	},
 }
 </script>
