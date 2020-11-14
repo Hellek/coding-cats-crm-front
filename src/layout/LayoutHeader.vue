@@ -3,7 +3,7 @@
 		<LayoutNav/>
 
 		<div>
-			<ThemeSwitcher/>
+			<!-- <ThemeSwitcher/> -->
 
 			<el-button
 				type="text"
@@ -19,7 +19,7 @@ export default {
 	name: 'LayoutHeader',
 	components: {
 		LayoutNav: () => import('./LayoutNav'),
-		ThemeSwitcher: () => import('./ThemeSwitcher'),
+		// ThemeSwitcher: () => import('./ThemeSwitcher'),
 	},
 }
 </script>
