@@ -28,12 +28,5 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .el-loading-mask {
-	background-color: unset;
-	animation: glow linear $--transition-base-duration * 7 infinite;
-}
-
-@keyframes glow {
-	0% { background-color: none }
-	50% { background-color: rgba(0, 0, 0, 0.7) }
-	100% { background-color: none }
+	background-color: rgba(0, 0, 0, 0.5);
 }
