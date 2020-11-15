@@ -3,6 +3,7 @@
 		<router-link :to="{ name: 'User' }">Создать пользователя</router-link>
 
 		<el-table
+			v-loading="isLoading"
 			:data="users"
 			stripe
 			class="mt-4"
@@ -43,6 +44,7 @@ export default {
 	],
 	data() {
 		return {
+			isLoading: true,
 			tableColumns: [
 				{ prop: 'firstName', label: 'Имя' },
 				{ prop: 'lastName', label: 'Фамилия' },
@@ -52,7 +54,9 @@ export default {
 		}
 	},
 	async created() {
+		this.isLoading = true
 		await this.setUsers()
+		this.isLoading = false
 	},
 }
 </script>
