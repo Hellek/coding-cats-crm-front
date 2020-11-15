@@ -52,6 +52,7 @@
 				<el-input
 					ref="message"
 					v-model="messageText"
+					v-loading="isSending"
 					v-disable-composition
 					placeholder="Введите текст"
 					@keyup.enter.native="send"
@@ -73,6 +74,8 @@ export default {
 	data() {
 		return {
 			isConnecting: true,
+			isSending: false,
+			sendTime: null,
 			messageText: '',
 			messages: [],
 			chatUsers: {},
@@ -128,6 +131,14 @@ export default {
 
 		// Подписываемя на сообщения
 		this.$socket.$subscribe('chat', message => {
+			if (
+				message.user.id === this.user.id
+				&& this.$dayjs(message.time).isSame(this.$dayjs(this.sendTime))
+			) {
+				this.messageText = ''
+				this.isSending = false
+			}
+
 			this.messages.push({
 				...message,
 				time: this.$dayjs(message.time).format('HH:mm'),
@@ -146,9 +157,19 @@ export default {
 	},
 	methods: {
 		send() {
-			if (!this.messageText.trim()) return
-			this.$socket.client.emit('chat', this.messageText)
-			this.messageText = ''
+			this.isSending = true
+
+			if (!this.messageText.trim()) {
+				this.isSending = false
+				return
+			}
+
+			this.sendTime = new Date()
+
+			this.$socket.client.emit('chat', {
+				time: this.sendTime,
+				text: this.messageText,
+			})
 		},
 	},
 }
