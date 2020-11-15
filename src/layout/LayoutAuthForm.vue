@@ -1,10 +1,10 @@
 <template>
 	<ElCard id="auth-form">
 		<ElInput
+			v-if="!isChangePasswordMode"
 			v-model="form.email"
 			placeholder="Email"
 			class="mb-4"
-			:disabled="isChangePasswordMode"
 		/>
 
 		<ElInput
@@ -12,21 +12,20 @@
 			v-model="form.password"
 			show-password
 			:placeholder="isChangePasswordMode ? 'Новый пароль' : 'Пароль'"
-			:class="{'mb-4': !isForgetQuestionVisible}"
+			class="mb-4"
 		/>
 
-		<el-button
-			v-if="isForgetQuestionVisible && !isRememberPasswordMode"
-			type="text"
-			size="mini"
-			@click="isRememberPasswordMode = true"
-		>Я забыл пароль</el-button>
-
 		<ElButton
-			class="w-100p ml-0"
+			class="w-100p"
 			type="primary"
 			@click="signIn"
 		>{{ signInLabel }}</ElButton>
+
+		<el-button
+			v-if="isForgetQuestionVisible && !isRememberPasswordMode"
+			class="w-100p ml-0 mt-4"
+			@click="isRememberPasswordMode = true"
+		>Я забыл пароль</el-button>
 	</ElCard>
 </template>
 
@@ -47,7 +46,7 @@ export default {
 	computed: {
 		signInLabel() {
 			if (this.isRememberPasswordMode) return 'Отправить на почту'
-			return this.isChangePasswordMode ? 'Сохранить' : 'Войти'
+			return this.isChangePasswordMode ? 'Сохранить и войти' : 'Войти'
 		},
 	},
 	created() {
@@ -95,11 +94,10 @@ export default {
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
-	max-width: 220px;
+	max-width: 240px;
 
 	@media screen and (max-width: $--sm) {
 		width: 90%;
-		max-width: 90%;
 	}
 }
 </style>
