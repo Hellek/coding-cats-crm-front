@@ -53,6 +53,15 @@ export default [
 		},
 	},
 	{
+		name: 'Settings',
+		path: '/settings',
+		component: () => import('Pages/Settings'),
+		meta: {
+			isNav: true,
+			label: 'Настройки',
+		},
+	},
+	{
 		name: 'The404',
 		path: '*',
 		component: () => import('KitComponents/PageNotFound'),
