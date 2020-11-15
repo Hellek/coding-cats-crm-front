@@ -1,6 +1,8 @@
 <template>
 	<div>
-		<router-link :to="{ name: 'User' }">Создать пользователя</router-link>
+		<router-link :to="{ name: 'User' }">
+			<el-button type="primary">Создать пользователя</el-button>
+		</router-link>
 
 		<el-table
 			v-loading="isLoading"
