@@ -16,6 +16,7 @@
 		/>
 
 		<ElButton
+			:loading="isSending"
 			class="w-100p"
 			type="primary"
 			@click="signIn"
@@ -34,6 +35,7 @@ export default {
 	name: 'LayoutAuthForm',
 	data() {
 		return {
+			isSending: false,
 			isForgetQuestionVisible: false,
 			isChangePasswordMode: false,
 			isRememberPasswordMode: false,
@@ -63,6 +65,8 @@ export default {
 	},
 	methods: {
 		async signIn() {
+			this.isSending = true
+
 			try {
 				if (this.isRememberPasswordMode) {
 					const res = (await this.$http.post('auth/password/reset', this.form)).data
@@ -80,6 +84,8 @@ export default {
 			} catch (error) {
 				if (!this.isChangePasswordMode) this.isForgetQuestionVisible = true
 				this.$notifyUserAboutError(error)
+			} finally {
+				this.isSending = false
 			}
 		},
 	},
