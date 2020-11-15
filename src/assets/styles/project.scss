@@ -10,6 +10,8 @@
 
 html,
 .el-card,
+.el-drawer,
+.el-drawer__header,
 .el-table tr,
 .el-input__inner,
 .el-textarea__inner,
@@ -17,6 +19,10 @@ html,
 	background: #222933;
 	color: #eee;
 	border-color: rgba(235, 238, 245, 0.2);
+}
+
+.el-drawer__body {
+	padding: 0 20px;
 }
 
 h1, h2, h3, h4, h5, h6 {
