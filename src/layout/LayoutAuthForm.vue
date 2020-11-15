@@ -88,11 +88,18 @@ export default {
 </script>
 
 <style lang="scss">
+@import 'ScssVariables';
+
 #auth-form {
 	position: absolute;
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
 	max-width: 220px;
+
+	@media screen and (max-width: $--sm) {
+		width: 90%;
+		max-width: 90%;
+	}
 }
 </style>
