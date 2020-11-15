@@ -8,6 +8,7 @@
 			:key="nav.name"
 			:to="{name: nav.name}"
 			class="mr-3 mb-3"
+			@click.native="$emit('clicked')"
 		>{{ nav.meta.label }}</router-link>
 	</div>
 </template>
