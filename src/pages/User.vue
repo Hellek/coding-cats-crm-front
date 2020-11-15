@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-loading.fullscreen="isLoading">
 		<el-form
 			ref="form"
 			:model="user"
@@ -69,13 +69,14 @@
 
 		<div>
 			<el-button
+				:loading="isSending"
 				type="primary"
 				@click="updateOrSave"
 			>{{ isCreationView ? 'Создать' : 'Сохранить' }}</el-button>
 
 			<el-button
-				v-if="!isCreationView"
-				:disabled="isInitialUser"
+				v-if="!isCreationView && !isInitialUser"
+				:loading="isSending"
 				@click="removeUser"
 			>Удалить</el-button>
 		</div>
@@ -90,6 +91,8 @@ export default {
 	},
 	data() {
 		return {
+			isSending: false,
+			isLoading: false,
 			user: {
 				email: '',
 				firstName: '',
@@ -120,16 +123,22 @@ export default {
 			return +this.userId === 1
 		},
 	},
-	created() {
+	async created() {
 		if (this.isCreationView) {
 			this.user.password = this.generatePassword()
 		} else {
-			this.getUser()
+			this.isLoading = true
+			await this.getUser()
+			this.isLoading = false
 		}
 	},
 	methods: {
 		async getUser() {
-			this.user = (await this.$http.get(`/users/${this.userId}`)).data
+			try {
+				this.user = (await this.$http.get(`/users/${this.userId}`)).data
+			} catch (error) {
+				this.$notifyUserAboutError(error)
+			}
 		},
 		generatePassword() {
 			const length = 20
@@ -144,6 +153,7 @@ export default {
 		},
 		async updateOrSave() {
 			if (!this.$isFormValid('form')) return
+			this.isSending = true
 
 			try {
 				if (this.isCreationView) {
@@ -165,9 +175,13 @@ export default {
 				}
 			} catch (error) {
 				this.$notifyUserAboutError(error)
+			} finally {
+				this.isSending = false
 			}
 		},
 		async removeUser() {
+			this.isSending = true
+
 			try {
 				await this.$confirm('Данные будут удалены. Вы уверены?', {
 					confirmButtonText: 'Да',
@@ -185,6 +199,8 @@ export default {
 			} catch (error) {
 				if (error === 'cancel') return
 				this.$notifyUserAboutError(error)
+			} finally {
+				this.isSending = false
 			}
 		},
 	},
