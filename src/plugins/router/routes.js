@@ -1,17 +1,8 @@
 export default [
 	{
-		name: 'Home',
-		path: '/',
-		component: () => import('Pages/Home'),
-		meta: {
-			tags: [
-				'homepage',
-			],
-		},
-	},
-	{
 		name: 'Chat',
 		path: '/chat',
+		alias: '/',
 		component: () => import('Pages/Chat'),
 		meta: {
 			isNav: true,
