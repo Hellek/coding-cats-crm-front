@@ -84,6 +84,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
 	name: 'User',
 	components: {
@@ -113,6 +115,9 @@ export default {
 		}
 	},
 	computed: {
+		...mapState({
+			currentUser: state => state.users.user,
+		}),
 		userId() {
 			return this.$route.params.id
 		},
@@ -160,6 +165,13 @@ export default {
 					this.user.id = (await this.$http.post('/users', this.user)).data
 				} else {
 					await this.$http.put(`/users/${this.userId}`, this.user)
+
+					if (this.user.id === this.currentUser.id) {
+						this.$store.commit('users/setUser', {
+							...this.currentUser,
+							...this.user,
+						})
+					}
 				}
 
 				this.$notify.success({
