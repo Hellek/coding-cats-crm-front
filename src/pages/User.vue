@@ -16,7 +16,10 @@
 			</el-form-item>
 
 			<el-form-item label="Емейл" prop="email">
-				<el-input v-model="user.email"/>
+				<el-input
+					v-model="user.email"
+					:disabled="isInitialUser"
+				/>
 			</el-form-item>
 
 			<el-form-item
@@ -114,7 +117,7 @@ export default {
 			return !this.userId
 		},
 		isInitialUser() {
-			return this.userId === 1
+			return +this.userId === 1
 		},
 	},
 	created() {
