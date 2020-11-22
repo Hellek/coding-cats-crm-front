@@ -23,13 +23,13 @@ export default [
 		path: '/roles',
 		component: () => import('Pages/Roles'),
 		meta: {
-			// isNav: true,
+			isNav: true,
 			label: 'Роли',
 		},
 	},
 	{
 		name: 'Role',
-		path: '/role/:id',
+		path: '/role/:id?',
 		component: () => import('Pages/Role'),
 		meta: {
 			label: 'Роль',
