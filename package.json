@@ -21,7 +21,7 @@
 		"core-js": "3.4.3",
 		"element-theme-dark": "1.0.3",
 		"element-ui": "2.12.0",
-		"element-ui-kit": "git+https://git@github.com/Hellek/element-ui-kit#1.6.3",
+		"element-ui-kit": "git+https://git@github.com/Hellek/element-ui-kit#1.6.4",
 		"socket.io-client": "3.0.0",
 		"vue": "2.6.11",
 		"vue-router": "3.1.3",
