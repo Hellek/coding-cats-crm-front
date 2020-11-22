@@ -1,47 +1,49 @@
 <template>
 	<div class="d-flex">
 		<div class="flex-1 mr-4">
-			<el-card
-				v-for="(section, i) in api"
-				:key="section.title"
-				:class="{'mt-4': i !== 0}"
-			>
-				<h1>{{ section.title }}</h1>
-
-				<div
-					v-for="(req, z) in section.requests"
-					:key="z"
-					class="d-flex mb-4"
+			<template v-for="(section, i) in api">
+				<el-card
+					v-if="isDevelopment || section.title !== 'Development'"
+					:key="section.title"
+					:class="{'mt-4': i !== 0}"
 				>
-					<div class="flex-grow">
-						<div class="d-flex">
-							<el-button
-								plain
-								:type="getButtonMethodType(req.method)"
-								style="width: 100px;"
-								@click="send(req)"
-							>{{ req.method }}</el-button>
+					<h1>{{ section.title }}</h1>
 
-							<el-input
-								v-model="req.query"
-								class="ml-3"
-							/>
-						</div>
+					<div
+						v-for="(req, z) in section.requests"
+						:key="z"
+						class="d-flex mb-4"
+					>
+						<div class="flex-grow">
+							<div class="d-flex">
+								<el-button
+									plain
+									:type="getButtonMethodType(req.method)"
+									style="width: 100px;"
+									@click="send(req)"
+								>{{ req.method }}</el-button>
 
-						<div
-							v-if="req.body"
-							class="mt-3"
-						>
-							<el-input
-								:value="JSON.stringify(req.body)"
-								type="textarea"
-								rows="3"
-								@input="req.body = JSON.parse($event)"
-							/>
+								<el-input
+									v-model="req.query"
+									class="ml-3"
+								/>
+							</div>
+
+							<div
+								v-if="req.body"
+								class="mt-3"
+							>
+								<el-input
+									:value="JSON.stringify(req.body)"
+									type="textarea"
+									rows="3"
+									@input="req.body = JSON.parse($event)"
+								/>
+							</div>
 						</div>
 					</div>
-				</div>
-			</el-card>
+				</el-card>
+			</template>
 		</div>
 
 		<el-card
@@ -59,6 +61,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 const getDefaultResult = () => ({
 	data: null,
 	status: null,
@@ -161,8 +165,21 @@ export default {
 			],
 		}
 	},
+	computed: {
+		...mapState({
+			currentUser: state => state.users.user,
+		}),
+		isDevelopment() {
+			return process.env.VUE_APP_MODE === 'development'
+		},
+	},
 	methods: {
 		async send({ query, method = 'GET', body }) {
+			if (this.currentUser.id !== 1 && method !== 'GET') {
+				this.$notify.warning({ title: 'Вам доступны только GET запросы' })
+				return
+			}
+
 			this.isSending = true
 			this.result = getDefaultResult()
 
