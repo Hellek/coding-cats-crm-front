@@ -41,18 +41,16 @@ export default {
 				throw error
 			}
 		},
-		/* setInitials({ dispatch }) {
-			dispatch('setHttpHooks')
-		}, */
-		/* setHttpHooks({ dispatch }) {
+		setHttpHooks({ dispatch }) {
 			http.interceptors.response.use(response => response, async error => {
 				if (error.response.status === 401) {
 					dispatch('users/unauthorize', null, { root: true })
-					// return Promise.resolve()
+					error.disableUserNotice = true
+					return Promise.reject(error)
 				}
 
 				return Promise.reject(error)
 			})
-		}, */
+		},
 	},
 }

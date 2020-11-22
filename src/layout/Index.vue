@@ -27,5 +27,8 @@ export default {
 			isAuthorized: state => state.users.isAuthorized,
 		}),
 	},
+	created() {
+		this.$store.dispatch('users/setHttpHooks')
+	},
 }
 </script>

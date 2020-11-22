@@ -13,7 +13,7 @@ export const setUsers = {
 				const users = await this.fetchUsers()
 				this.users = users.sort((a, b) => a.id - b.id)
 			} catch (error) {
-				this.$notifyUserAboutError(error.message)
+				this.$notifyUserAboutError(error)
 			}
 		},
 	},
