@@ -160,6 +160,18 @@ export default {
 							method: 'DELETE',
 							query: 'development/table/users',
 						},
+						{
+							method: 'POST',
+							query: 'development/table/roles',
+						},
+						{
+							method: 'PUT',
+							query: 'development/table/roles',
+						},
+						{
+							method: 'DELETE',
+							query: 'development/table/roles',
+						},
 					],
 				},
 			],
