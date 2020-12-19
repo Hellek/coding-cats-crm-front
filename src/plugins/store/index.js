@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import roles from './modules/roles'
 import users from './modules/users'
+import tinkoffInvest from './modules/tinkoffInvest'
 
 Vue.use(Vuex)
 
@@ -13,6 +14,7 @@ const store = new Vuex.Store({
 	modules: {
 		roles,
 		users,
+		tinkoffInvest,
 	},
 })
 
