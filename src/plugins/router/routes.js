@@ -10,6 +10,15 @@ export default [
 		},
 	},
 	{
+		name: 'TinkoffInvest',
+		path: '/tinkoff-invest',
+		component: () => import('Pages/TinkoffInvest'),
+		meta: {
+			isNav: true,
+			label: 'TinkoffInvest',
+		},
+	},
+	{
 		name: 'RestTest',
 		path: '/rest-test',
 		component: () => import('Pages/RestTest'),
