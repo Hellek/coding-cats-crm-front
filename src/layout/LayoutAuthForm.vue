@@ -2,7 +2,7 @@
 	<ElCard id="auth-form">
 		<ElInput
 			v-if="!isChangePasswordMode"
-			v-model="form.email"
+			v-model.trim="form.email"
 			placeholder="Email"
 			class="mb-4"
 		/>
