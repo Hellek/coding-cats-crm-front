@@ -25,6 +25,7 @@ export default [
 		meta: {
 			isNav: true,
 			label: 'RestTest',
+			allowedUserId: [1],
 		},
 	},
 	{
@@ -34,6 +35,7 @@ export default [
 		meta: {
 			isNav: true,
 			label: 'Роли',
+			allowedUserId: [1],
 		},
 	},
 	{
@@ -51,6 +53,7 @@ export default [
 		meta: {
 			isNav: true,
 			label: 'Пользователи',
+			allowedUserId: [1],
 		},
 	},
 	{
