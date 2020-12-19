@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<User
-			:userId="user.id"
+			:user-id="user.id"
 		/>
 	</div>
 </template>

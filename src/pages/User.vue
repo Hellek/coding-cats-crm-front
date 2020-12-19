@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<User
-			:userId="+$route.params.id"
+			:user-id="+$route.params.id"
 		/>
 	</div>
 </template>
