@@ -18,7 +18,7 @@
 			<el-form-item label="Емейл" prop="email">
 				<el-input
 					v-model="user.email"
-					:disabled="isInitialUser"
+					:disabled="isInitialUser || isSelfEdit"
 				/>
 			</el-form-item>
 
@@ -59,7 +59,7 @@
 			<el-form-item label="Активен">
 				<el-select
 					v-model="user.active"
-					:disabled="isInitialUser"
+					:disabled="isInitialUser || isSelfEdit"
 				>
 					<el-option label="Да" :value="true"/>
 					<el-option label="Нет" :value="false"/>
@@ -155,7 +155,10 @@ export default {
 			return !this.userId
 		},
 		isInitialUser() {
-			return +this.userId === 1
+			return this.user.id === 1
+		},
+		isSelfEdit() {
+			return this.user.id === this.currentUser.id
 		},
 	},
 	async created() {
@@ -196,7 +199,7 @@ export default {
 				} else {
 					await this.$http.put(`/users/${this.userId}`, this.user)
 
-					if (this.user.id === this.currentUser.id) {
+					if (this.isSelfEdit) {
 						this.$store.commit('users/setUser', {
 							...this.currentUser,
 							...this.user,
