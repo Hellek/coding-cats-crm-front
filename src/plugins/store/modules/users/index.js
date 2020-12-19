@@ -24,6 +24,15 @@ export default {
 		},
 	},
 	actions: {
+		dropToDefaults({ commit, dispatch }) {
+			commit('dropState')
+			dispatch('clearCache')
+		},
+		clearCache() {
+			Object.keys(defaultState()).forEach(key => {
+				localStorage.removeItem(`users/${key}`)
+			})
+		},
 		async authorize({ commit }, credentials) {
 			try {
 				const { data } = await http.post('auth/login', credentials)
@@ -33,10 +42,14 @@ export default {
 				throw error
 			}
 		},
-		async unauthorize({ commit }) {
+		async unauthorize({ commit, dispatch, rootState }) {
 			try {
 				await http.post('auth/logout')
 				commit('setIsAuthorized', false)
+
+				Object.keys(rootState).forEach(moduleName => {
+					dispatch(`${moduleName}/dropToDefaults`, null, { root: true })
+				})
 			} catch (error) {
 				throw error
 			}

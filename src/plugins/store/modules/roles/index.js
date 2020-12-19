@@ -19,8 +19,20 @@ export default {
 		removeRole(state, id) {
 			delete state.list[id]
 		},
+		dropState(state) {
+			Object.assign(state, defaultState())
+		},
 	},
 	actions: {
+		dropToDefaults({ commit, dispatch }) {
+			commit('dropState')
+			dispatch('clearCache')
+		},
+		clearCache() {
+			Object.keys(defaultState()).forEach(key => {
+				localStorage.removeItem(`roles/${key}`)
+			})
+		},
 		async fetchRoles({ commit, dispatch }) {
 			const storageRolesList = localStorage.getItem('roles/list')
 
