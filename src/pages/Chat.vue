@@ -21,7 +21,7 @@
 					size="mini"
 					effect="dark"
 					class="mr-3 mb-3"
-				>{{ chatUser.firstName }}</el-tag>
+				>{{ chatUser.firstName }} {{ chatUser.lastName }}</el-tag>
 			</div>
 
 			<el-card
