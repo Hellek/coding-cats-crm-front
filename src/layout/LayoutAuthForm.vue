@@ -1,33 +1,38 @@
 <template>
-	<ElCard id="auth-form">
-		<ElInput
+	<el-card
+		id="auth-form"
+		@keydown.native.enter="signIn"
+	>
+		<el-input
 			v-if="!isChangePasswordMode"
+			ref="email"
 			v-model.trim="form.email"
 			placeholder="Email"
 			class="mb-4"
 		/>
 
-		<ElInput
+		<el-input
 			v-if="!isRememberPasswordMode"
+			ref="password"
 			v-model="form.password"
 			show-password
 			:placeholder="isChangePasswordMode ? 'Новый пароль' : 'Пароль'"
 			class="mb-4"
 		/>
 
-		<ElButton
+		<el-button
 			:loading="isSending"
 			class="w-100p"
 			type="primary"
 			@click="signIn"
-		>{{ signInLabel }}</ElButton>
+		>{{ signInLabel }}</el-button>
 
 		<el-button
 			v-if="isForgetQuestionVisible && !isRememberPasswordMode"
 			class="w-100p ml-0 mt-4"
 			@click="isRememberPasswordMode = true"
 		>Я забыл пароль</el-button>
-	</ElCard>
+	</el-card>
 </template>
 
 <script>
@@ -62,6 +67,10 @@ export default {
 
 			this.$router.replace({ query: null })
 		}
+	},
+	mounted() {
+		if (this.$refs.email) this.$refs.email.focus()
+		else if (this.$refs.password) this.$refs.password.focus()
 	},
 	methods: {
 		async signIn() {
