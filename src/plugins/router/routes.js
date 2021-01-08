@@ -1,17 +1,8 @@
 export default [
 	{
-		name: 'Chat',
-		path: '/chat',
-		alias: '/',
-		component: () => import('Pages/Chat'),
-		meta: {
-			isNav: true,
-			label: 'Чат',
-		},
-	},
-	{
 		name: 'TinkoffInvest',
 		path: '/tinkoff-invest',
+		alias: '/',
 		component: () => import('Pages/TinkoffInvest'),
 		meta: {
 			isNav: true,

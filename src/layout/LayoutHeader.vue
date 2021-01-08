@@ -5,7 +5,6 @@
 			class="el-icon-menu color-white font-size-large clickable"
 			@click="isDrawerVisible = true"
 		/>
-		<!-- @click="$refs.drawer.closeDrawer()" -->
 
 		<LayoutNav
 			v-if="!$breakpoints.smAndDown"
@@ -13,8 +12,8 @@
 
 		<el-drawer
 			v-else
-			id="header-drawer"
 			ref="drawer"
+			class="no-header"
 			:visible.sync="isDrawerVisible"
 			:with-header="false"
 			:append-to-body="true"
@@ -30,11 +29,21 @@
 
 		<div>
 			<!-- <ThemeSwitcher/> -->
+			<el-button
+				@click="showChat"
+			>Чат</el-button>
 
 			<el-button
 				:loading="isUnauthorizing"
 				@click="unauthorize"
 			>Выход</el-button>
+
+			<el-drawer
+				class="no-header"
+				:visible.sync="isChatVisible"
+			>
+				<Chat class="mt-5"/>
+			</el-drawer>
 		</div>
 	</header>
 </template>
@@ -44,12 +53,14 @@ export default {
 	name: 'LayoutHeader',
 	components: {
 		LayoutNav: () => import('./LayoutNav'),
+		Chat: () => import('Components/Chat'),
 		// ThemeSwitcher: () => import('./ThemeSwitcher'),
 	},
 	data() {
 		return {
 			isUnauthorizing: false,
 			isDrawerVisible: false,
+			isChatVisible: false,
 		}
 	},
 	methods: {
@@ -58,12 +69,15 @@ export default {
 			await this.$store.dispatch('users/unauthorize')
 			this.isUnauthorizing = false
 		},
+		showChat() {
+			this.isChatVisible = true
+		},
 	},
 }
 </script>
 
 <style lang="scss">
-#header-drawer {
+.no-header {
 	.el-drawer__header {
 		display: none;
 	}

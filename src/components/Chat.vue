@@ -29,7 +29,7 @@
 				shadow="never"
 				:style="{
 					'overflow-y': 'scroll',
-					height: 'calc(100vh - 200px)',
+					height: 'calc(100vh - 160px)',
 				}"
 			>
 				<div
@@ -153,6 +153,7 @@ export default {
 		})
 	},
 	beforeDestroy() {
+		// TODO сейчас не работает
 		this.$socket.client.disconnect()
 	},
 	methods: {
