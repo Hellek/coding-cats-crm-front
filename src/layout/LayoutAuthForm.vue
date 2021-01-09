@@ -89,7 +89,7 @@ export default {
 					await this.$http.put('auth/password', this.form)
 				}
 
-				await this.$store.dispatch('users/authorize', this.form)
+				await this.$store.dispatch('auth/authorize', this.form)
 			} catch (error) {
 				if (!this.isChangePasswordMode) this.isForgetQuestionVisible = true
 				this.$notifyUserAboutError(error)

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import auth from './modules/auth'
 import roles from './modules/roles'
 import users from './modules/users'
 import tinkoffInvest from './modules/tinkoffInvest'
@@ -12,6 +13,7 @@ const store = new Vuex.Store({
 	// https://vuex.vuejs.org/ru/guide/strict.html
 	strict: isDevelopment,
 	modules: {
+		auth,
 		roles,
 		users,
 		tinkoffInvest,

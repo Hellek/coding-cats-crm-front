@@ -71,7 +71,7 @@ export default {
 	methods: {
 		async unauthorize() {
 			this.isUnauthorizing = true
-			await this.$store.dispatch('users/unauthorize')
+			await this.$store.dispatch('auth/unauthorize')
 			this.isUnauthorizing = false
 		},
 		showChat() {

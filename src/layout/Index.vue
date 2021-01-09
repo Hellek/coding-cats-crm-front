@@ -4,10 +4,13 @@
 
 		<div
 			v-else
+			v-loading="isAuthorizing"
 			class="d-flex flex-column flex-grow"
 		>
-			<LayoutHeader/>
-			<LayoutMain/>
+			<template v-if="!isAuthorizing">
+				<LayoutHeader/>
+				<LayoutMain/>
+			</template>
 		</div>
 	</div>
 </template>
@@ -24,11 +27,13 @@ export default {
 	},
 	computed: {
 		...mapState({
-			isAuthorized: state => state.users.isAuthorized,
+			isAuthorized: state => state.auth.isAuthorized,
+			isAuthorizing: state => state.auth.isAuthorizing,
 		}),
 	},
-	created() {
-		this.$store.dispatch('users/setHttpHooks')
+	async created() {
+		this.$store.dispatch('auth/setHttpHooks')
+		this.$store.dispatch('auth/ping')
 	},
 }
 </script>
