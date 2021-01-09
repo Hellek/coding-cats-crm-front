@@ -28,28 +28,26 @@
 		</el-drawer>
 
 		<div>
-			<ThemeSwitcher/>
+			<!-- <ThemeSwitcher/> -->
 
-			<el-button
+			<!-- <el-button
 				icon="el-icon-chat-dot-round"
 				circle
 				@click="showChat"
-			/>
+			/> -->
 
 			<el-button
-				icon="el-icon-lock"
-				circle
 				:loading="isUnauthorizing"
 				@click="unauthorize"
-			/>
+			>Выход</el-button>
 
-			<el-drawer
+			<!-- <el-drawer
 				class="no-header"
 				:size="$breakpoints.smAndDown ? '85%' : '480px'"
 				:visible.sync="isChatVisible"
 			>
 				<Chat class="mt-5"/>
-			</el-drawer>
+			</el-drawer> -->
 		</div>
 	</header>
 </template>
@@ -59,8 +57,8 @@ export default {
 	name: 'LayoutHeader',
 	components: {
 		LayoutNav: () => import('./LayoutNav'),
-		Chat: () => import('Components/Chat'),
-		ThemeSwitcher: () => import('./ThemeSwitcher'),
+		// Chat: () => import('Components/Chat'),
+		// ThemeSwitcher: () => import('./ThemeSwitcher'),
 	},
 	data() {
 		return {
