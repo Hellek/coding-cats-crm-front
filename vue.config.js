@@ -6,6 +6,7 @@ module.exports = {
 		...KitVueConfigs.vueConfig.configureWebpack,
 		resolve: {
 			alias: {
+				'element-ui/lib/locale/lang/zh-CN': 'element-ui/lib/locale/lang/ru-RU',
 				ScssVariables: '@/assets/styles/variables.scss',
 				...KitVueConfigs.getAliases({
 					dirname: __dirname,
