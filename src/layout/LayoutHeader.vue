@@ -45,6 +45,7 @@
 
 			<el-drawer
 				class="no-header"
+				:size="$breakpoints.smAndDown ? '85%' : '480px'"
 				:visible.sync="isChatVisible"
 			>
 				<Chat class="mt-5"/>
