@@ -38,23 +38,17 @@ export default {
 				const { data } = await http.post('auth/login', credentials)
 				commit('users/setUser', data, { root: true })
 				commit('setIsAuthorized', true)
-			} catch (error) {
-				throw error
 			} finally {
 				commit('setIsAuthorizing', false)
 			}
 		},
 		async unauthorize({ commit, dispatch, rootState }) {
-			try {
-				await http.post('auth/logout')
-				commit('setIsAuthorized', false)
+			await http.post('auth/logout')
+			commit('setIsAuthorized', false)
 
-				Object.keys(rootState).forEach(moduleName => {
-					dispatch(`${moduleName}/dropToDefaults`, null, { root: true })
-				})
-			} catch (error) {
-				throw error
-			}
+			Object.keys(rootState).forEach(moduleName => {
+				dispatch(`${moduleName}/dropToDefaults`, null, { root: true })
+			})
 		},
 		setHttpHooks({ dispatch }) {
 			http.interceptors.response.use(response => response, async error => {
