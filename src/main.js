@@ -12,6 +12,7 @@ import Styles from 'Styles/index.scss'
 // import KitComponents from 'KitComponents/common'
 import KitPlugins from 'KitPlugins/common'
 import App from './layout/Index.vue'
+import './registerServiceWorker'
 
 // common
 Vue.use($dayjs)
