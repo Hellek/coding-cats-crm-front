@@ -2,47 +2,52 @@
 	<div class="d-flex">
 		<div class="flex-1 mr-4">
 			<template v-for="(section, i) in api">
-				<el-card
+				<el-collapse
 					v-if="isDevelopment || section.title !== 'Development'"
-					:key="section.title"
-					:class="{'mt-4': i !== 0}"
+					v-model="section.activeNames"
+					:key="i"
 				>
-					<h1>{{ section.title }}</h1>
-
-					<div
-						v-for="(req, z) in section.requests"
-						:key="z"
-						class="d-flex mb-4"
+					<el-collapse-item
+						:title="section.title"
+						:name="section.title"
 					>
-						<div class="flex-grow">
-							<div class="d-flex">
-								<el-button
-									plain
-									:type="getButtonMethodType(req.method)"
-									style="width: 100px;"
-									@click="send(req)"
-								>{{ req.method }}</el-button>
+						<div
+							v-for="(req, z) in section.requests"
+							:key="z"
+							class="d-flex mb-4"
+						>
+							<div class="flex-grow">
+								<div class="d-flex">
+									<el-button
+										plain
+										:type="getButtonMethodType(req.method)"
+										style="width: 100px;"
+										@click="send(req)"
+									>{{ req.method }}</el-button>
 
-								<el-input
-									v-model="req.query"
-									class="ml-3"
-								/>
-							</div>
+									<el-input
+										v-model="req.query"
+										class="ml-3"
+									/>
+								</div>
 
-							<div
-								v-if="req.body"
-								class="mt-3"
-							>
-								<el-input
-									:value="JSON.stringify(req.body)"
-									type="textarea"
-									rows="3"
-									@input="req.body = JSON.parse($event)"
-								/>
+								<div
+									v-if="req.body"
+									class="mt-3"
+								>
+									<el-input
+										:value="JSON.stringify(req.body)"
+										type="textarea"
+										rows="3"
+										@input="req.body = JSON.parse($event)"
+									/>
+								</div>
+
+								<el-divider v-if="req.divider" class="mb-2"/>
 							</div>
 						</div>
-					</div>
-				</el-card>
+					</el-collapse-item>
+				</el-collapse>
 			</template>
 		</div>
 
