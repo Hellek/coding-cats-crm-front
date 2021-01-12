@@ -28,7 +28,7 @@
 		</el-drawer>
 
 		<div>
-			<!-- <ThemeSwitcher/> -->
+			<ThemeSwitcher/>
 
 			<!-- <el-button
 				icon="el-icon-chat-dot-round"
@@ -58,7 +58,7 @@ export default {
 	components: {
 		LayoutNav: () => import('./LayoutNav'),
 		// Chat: () => import('Components/Chat'),
-		// ThemeSwitcher: () => import('./ThemeSwitcher'),
+		ThemeSwitcher: () => import('./ThemeSwitcher'),
 	},
 	data() {
 		return {

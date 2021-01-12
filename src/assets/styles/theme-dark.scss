@@ -1,0 +1,95 @@
+/* stylelint-disable no-descending-specificity */
+// @import '~element-theme-dark/lib/index.css';
+
+* {
+	transition: color, background-color, border-color $--transition-base-duration $--transition-base-function;
+}
+
+.dark-theme {
+	$--color-black: #222933; // #ffffff белый или #000000 черный
+	$--color-text-regular: #eee; // #606266
+	$--color-text-primary: #ccc;
+	$--color-info: #bbb; // #909399
+	// $--color-text-placeholder: #C0C4CC !default;
+	$--background-color-base: #313846; // #f5f7fa
+	$--border-color-base: #121820; // #dcdfe6
+	$--border-color-light: #121820; // #e4e7ed
+	$--border-color-lighter: #121820; // #ebeef5
+	// $--font-color-disabled-base: ; // #bbb
+
+	::-webkit-scrollbar-track {
+		background-color: rgba(235, 238, 245, 0.075);
+	}
+
+	::-webkit-scrollbar-thumb {
+		background-color: rgba(235, 238, 245, 0.1);
+	}
+
+	body,
+	.el-card,
+	.el-input__inner,
+	.el-textarea__inner,
+	.el-drawer,
+	.el-table,
+	.el-table tr {
+		background-color: $--color-black;
+	}
+
+	body,
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	.el-form-item__label,
+	.el-input__inner,
+	.el-textarea__inner,
+	.el-input.is-disabled .el-input__inner,
+	.el-table {
+		color: $--color-text-regular;
+	}
+
+	.el-card {
+		color: $--color-text-primary;
+	}
+
+	.el-input__inner,
+	.el-textarea__inner {
+		border-color: $--border-color-base;
+	}
+
+	.el-card,
+	.el-table th.is-leaf,
+	.el-table td {
+		border-color: $--border-color-lighter;
+	}
+
+	.el-table--group::after,
+	.el-table--border::after,
+	.el-table::before {
+		background-color: $--border-color-lighter;
+	}
+
+	.el-input.is-disabled .el-input__inner {
+		background-color: $--background-color-base;
+		border-color: $--border-color-light;
+	}
+
+	.el-table--striped .el-table__body tr.el-table__row--striped td {
+		background-color: #1f3647;
+	}
+
+	.el-table th {
+		background-color: #2d3744;
+	}
+
+	.el-table thead,
+	.el-table__empty-text {
+		color: $--color-info;
+	}
+
+	.el-loading-mask {
+		background-color: rgba(0, 0, 0, 0.5);
+	}
+}

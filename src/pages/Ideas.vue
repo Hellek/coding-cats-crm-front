@@ -5,7 +5,6 @@
 		</router-link>
 
 		<el-card
-			shadow="always"
 			:body-style="{ padding: 0 }"
 			class="mt-4"
 		>
@@ -84,7 +83,7 @@ export default {
 	methods: {
 		async setIdeas() {
 			try {
-				this.ideas = (await this.$http.get('ideas')).data
+				// this.ideas = (await this.$http.get('ideas')).data
 			} catch (error) {
 				this.$notifyUserAboutError(error)
 			}
