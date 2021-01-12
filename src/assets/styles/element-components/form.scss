@@ -1,0 +1,10 @@
+.el-form-item.is-required .el-form-item__label::before {
+	content: '' !important;
+	margin-right: $--size-0 !important;
+}
+
+.el-form-item.is-required .el-form-item__label::after {
+	content: '*';
+	color: $--color-danger;
+	margin-left: $--size-1;
+}
