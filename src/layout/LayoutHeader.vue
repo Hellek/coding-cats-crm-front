@@ -1,5 +1,5 @@
 <template>
-	<header class="d-flex justify-content-between align-items-center py-1 px-5 shadow-hard flex-wrap position-relative">
+	<header class="d-flex justify-content-between align-items-center py-1 px-4 shadow-hard flex-wrap position-relative">
 		<i
 			v-if="$breakpoints.smAndDown"
 			class="el-icon-menu color-white font-size-large clickable"

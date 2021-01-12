@@ -4,8 +4,8 @@
 			<template v-for="(section, i) in api">
 				<el-collapse
 					v-if="isDevelopment || section.title !== 'Development'"
-					v-model="section.activeNames"
 					:key="i"
+					v-model="section.activeNames"
 				>
 					<el-collapse-item
 						:title="section.title"

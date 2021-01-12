@@ -1,7 +1,4 @@
 @import 'ScssVariables';
-@import '~element-ui/packages/theme-chalk/src/divider.scss';
-@import '~element-ui/packages/theme-chalk/src/icon.scss';
-// avatar.scss backtop.scss calendar.scss cascader-panel.scss drawer.scss image.scss infinite-scroll.scss infiniteScroll.scss link.scss page-header.scss popconfirm.scss timeline-item.scss timeline.scss
 
 ::-webkit-scrollbar-track {
 	background-color: rgba(235, 238, 245, 0.075);
@@ -21,6 +18,11 @@ html,
 .is-plain {
 	background: #222933;
 	color: #eee;
+	border-color: rgba(235, 238, 245, 0.2);
+}
+
+.el-input-group__append,
+.el-input-group__prepend {
 	border-color: rgba(235, 238, 245, 0.2);
 }
 

@@ -32,8 +32,12 @@ export default {
 		}),
 	},
 	async created() {
-		this.$store.dispatch('auth/setHttpHooks')
-		this.$store.dispatch('auth/ping')
+		try {
+			this.$store.dispatch('auth/setHttpHooks')
+			this.$store.dispatch('auth/ping')
+		} catch (error) {
+			this.$notifyUserAboutError(error)
+		}
 	},
 }
 </script>

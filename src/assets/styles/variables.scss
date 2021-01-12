@@ -1,5 +1,5 @@
-@import '~element-ui-kit/src/styles/variables-base.scss';
+@import 'element-ui/packages/theme-chalk/src/common/var.scss';
 
 $--font-family: 'Open Sans', sans-serif;
 
-@import 'element-ui/packages/theme-chalk/src/common/var.scss';
+@import '~element-ui-kit/src/styles/variables-base.scss';

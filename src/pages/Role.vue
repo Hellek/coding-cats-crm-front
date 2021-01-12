@@ -39,7 +39,7 @@
 		<el-button
 			type="primary"
 			:disabled="isDefaultRole"
-			@click="updateOrSave"
+			@click="createOrSave"
 		>{{ isCreationView ? 'Создать' : 'Сохранить' }}</el-button>
 
 		<el-button
@@ -136,7 +136,7 @@ export default {
 
 			return preparedRole
 		},
-		async updateOrSave() {
+		async createOrSave() {
 			const preparedRole = this.getPreparedRole()
 
 			try {

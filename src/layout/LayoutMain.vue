@@ -1,5 +1,5 @@
 <template>
-	<main class="flex-grow p-4 pr-2">
+	<main class="flex-grow px-4 py-5">
 		<router-view/>
 	</main>
 </template>

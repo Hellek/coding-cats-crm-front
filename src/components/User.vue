@@ -71,7 +71,7 @@
 			<el-button
 				:loading="isSending"
 				type="primary"
-				@click="updateOrSave"
+				@click="createOrSave"
 			>{{ isCreationView ? 'Создать' : 'Сохранить' }}</el-button>
 
 			<el-popover
@@ -189,7 +189,7 @@ export default {
 
 			return retVal
 		},
-		async updateOrSave() {
+		async createOrSave() {
 			if (!this.$isFormValid('form')) return
 			this.isSending = true
 
