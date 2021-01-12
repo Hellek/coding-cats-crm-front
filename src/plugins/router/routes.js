@@ -1,8 +1,22 @@
 export default [
 	{
+		name: 'Ideas',
+		path: '/ideas',
+		alias: '/',
+		component: () => import('Pages/Ideas'),
+		meta: {
+			isNav: true,
+			label: 'Идеи',
+		},
+	},
+	{
+		name: 'Idea',
+		path: '/idea/:id?',
+		component: () => import('Pages/Idea'),
+	},
+	{
 		name: 'TinkoffInvest',
 		path: '/tinkoff-invest',
-		alias: '/',
 		component: () => import('Pages/TinkoffInvest'),
 		meta: {
 			isNav: true,
