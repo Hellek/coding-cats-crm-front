@@ -159,11 +159,21 @@ export default {
 					requests: [
 						{
 							method: 'POST',
+							query: 'development/table/ideas',
+						},
+						{
+							method: 'DELETE',
+							query: 'development/table/ideas',
+							divider: true,
+						},
+						{
+							method: 'POST',
 							query: 'development/table/users',
 						},
 						{
 							method: 'DELETE',
 							query: 'development/table/users',
+							divider: true,
 						},
 						{
 							method: 'POST',
