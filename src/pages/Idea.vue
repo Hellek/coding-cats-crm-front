@@ -10,16 +10,18 @@
 			<el-form-item label="Тикер" prop="ticker">
 				<el-select
 					v-model="idea.ticker"
-					:disabled="isEditView"
+					:loading="isTickersLoading"
+					:remote-method="suggestTickers"
 					filterable
-					allow-create
+					remote
+					:disabled="isEditView"
 					@change="createOrSave"
 				>
 					<el-option
-						v-for="item in ['TSLA', 'AAPL', 'REGN', 'OSUR', 'AMZN']"
-						:key="item"
-						:label="item"
-						:value="item"
+						v-for="i in instruments"
+						:key="i.ticker"
+						:label="i.ticker"
+						:value="i.ticker"
 					/>
 				</el-select>
 			</el-form-item>
@@ -64,7 +66,7 @@
 					v-loading="isAddingComment"
 					placeholder="Добавить комментарий"
 					class="w-100p"
-					:class="{'mt-2': idea.comments.length}"
+					:class="{'mt-4': idea.comments.length}"
 					:disabled="isAddingComment"
 					@keyup.enter.native="addComment"
 				>
@@ -119,7 +121,9 @@ export default {
 		return {
 			isSending: false,
 			isLoading: false,
+			isTickersLoading: false,
 			isAddingComment: false,
+			instruments: [],
 			idea: {
 				id: null,
 				ticker: '',
@@ -249,6 +253,20 @@ export default {
 				this.$notifyUserAboutError(error)
 			} finally {
 				this.isSending = false
+			}
+		},
+		async suggestTickers(queryString) {
+			try {
+				this.isTickersLoading = true
+
+				this.instruments = (await this.$http.get('instruments', {
+					params: { queryString },
+				})).data
+			} catch (error) {
+				this.$notifyUserAboutError(error)
+				this.instruments = []
+			} finally {
+				this.isTickersLoading = false
 			}
 		},
 	},

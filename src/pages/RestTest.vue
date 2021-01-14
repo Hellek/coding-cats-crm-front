@@ -159,6 +159,15 @@ export default {
 					requests: [
 						{
 							method: 'POST',
+							query: 'development/table/instruments',
+						},
+						{
+							method: 'DELETE',
+							query: 'development/table/instruments',
+							divider: true,
+						},
+						{
+							method: 'POST',
 							query: 'development/table/ideas',
 						},
 						{
