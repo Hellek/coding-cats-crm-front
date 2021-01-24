@@ -226,7 +226,7 @@ export default {
 		},
 		async updatePassword() {
 			try {
-				await this.$http.put('auth/password', this.user)
+				await this.$http.put('users/password', this.user)
 				this.$notify.success({ title: 'Пароль обновлён' })
 				this.isUpdatePasswordVisible = false
 			} catch (error) {

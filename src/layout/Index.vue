@@ -7,7 +7,7 @@
 			v-loading="isAuthorizing"
 			class="d-flex flex-column flex-grow"
 		>
-			<template v-if="!isAuthorizing">
+			<template v-if="isGettingNewToken || !isAuthorizing">
 				<LayoutHeader/>
 				<LayoutMain/>
 			</template>
@@ -29,12 +29,15 @@ export default {
 		...mapState({
 			isAuthorized: state => state.auth.isAuthorized,
 			isAuthorizing: state => state.auth.isAuthorizing,
+			isGettingNewToken: state => state.auth.isGettingNewToken,
+			tokenRefresherIntervalId: state => state.auth.tokenRefresherIntervalId,
 		}),
 	},
 	async created() {
 		try {
+			this.$store.dispatch('auth/setAuthHeader')
 			this.$store.dispatch('auth/setHttpHooks')
-			this.$store.dispatch('auth/ping')
+			if (this.isAuthorized) this.$store.dispatch('auth/runTokenRefresher')
 		} catch (error) {
 			this.$notifyUserAboutError(error)
 		}

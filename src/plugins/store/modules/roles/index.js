@@ -25,8 +25,8 @@ export default {
 	},
 	actions: {
 		dropToDefaults({ commit, dispatch }) {
-			commit('dropState')
 			dispatch('clearCache')
+			commit('dropState')
 		},
 		clearCache() {
 			Object.keys(defaultState()).forEach(key => {

@@ -85,7 +85,7 @@ export default {
 					requests: [
 						{
 							method: 'POST',
-							query: '/auth/login',
+							query: '/auth/authenticate',
 							body: {
 								email: 'aaa@ya.ru',
 								password: '123',
