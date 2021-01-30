@@ -15,6 +15,7 @@ html,
 .el-table tr,
 .el-input__inner,
 .el-textarea__inner,
+.el-divider__text,
 .is-plain {
 	background: #222933;
 	color: #eee;
@@ -44,4 +45,18 @@ h1, h2, h3, h4, h5, h6 {
 
 .el-input__inner::placeholder {
 	color: $--color-text-secondary;
+}
+
+.el-input {
+	&.max-width-base {
+		max-width: 188px;
+	}
+}
+
+.el-form-item {
+	margin-bottom: 16px;
+}
+
+.el-form--inline .el-form-item {
+	margin-right: 12px;
 }
