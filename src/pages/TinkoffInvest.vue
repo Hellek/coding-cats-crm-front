@@ -21,7 +21,7 @@
 
 			<el-input
 				v-if="!isTokenValid"
-				:value="isSandbox ? sandboxToken : realToken"
+				:value="isSandbox ? user.TISandboxToken : user.TIRealToken"
 				clearable
 				placeholder="Укажите токен"
 				show-password
@@ -113,15 +113,14 @@ export default {
 		}
 	},
 	computed: {
-		...mapState('tinkoffInvest', [
-			'sandboxToken',
-			'realToken',
+		...mapState('users', [
+			'user',
 		]),
 		apiURL() {
 			return `https://api-invest.tinkoff.ru/openapi${this.isSandbox ? '/sandbox' : ''}`
 		},
 		secretToken() {
-			return this.isSandbox ? this.sandboxToken : this.realToken
+			return this.isSandbox ? this.user.TISandboxToken : this.user.TIRealToken
 		},
 	},
 	watch: {
