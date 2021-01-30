@@ -10,17 +10,24 @@
 			label-position="top"
 		>
 			<el-form-item label="Имя">
-				<el-input v-model="user.firstName"/>
+				<el-input
+					v-model="user.firstName"
+					placeholder="Пётр"
+				/>
 			</el-form-item>
 
 			<el-form-item label="Фамилия">
-				<el-input v-model="user.lastName"/>
+				<el-input
+					v-model="user.lastName"
+					placeholder="Чайковский"
+				/>
 			</el-form-item>
 
 			<el-form-item label="Емейл" prop="email">
 				<el-input
 					v-model="user.email"
 					:disabled="isInitialUser || isSelfEdit"
+					placeholder="tchaikovsky@ya.ru"
 				/>
 			</el-form-item>
 
