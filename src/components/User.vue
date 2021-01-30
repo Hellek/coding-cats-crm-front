@@ -109,22 +109,31 @@
 
 			<el-divider content-position="left">Прочее</el-divider>
 
-			<div class="d-flex mb-4">
-				<el-input
-					v-model="user.password"
-					placeholder="Новый пароль"
-					show-password
-					class="max-width-base mr-4"
-				/>
+			<el-form
+				ref="updatePasswordForm"
+				:model="user"
+			>
+				<el-form-item
+					prop="password"
+					:rules="user.password ? rules.password : null"
+				>
+					<el-input
+						v-model="user.password"
+						placeholder="Новый пароль"
+						show-password
+						class="max-width-base mr-4"
+					/>
 
-				<el-button @click="updatePassword">Сменить</el-button>
-			</div>
+					<el-button @click="updatePassword">Сменить</el-button>
+				</el-form-item>
+			</el-form>
 		</div>
 	</div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import { isRequired, isEmail, minLength } from 'Utils/validationRules'
 
 export default {
 	name: 'User',
@@ -165,11 +174,12 @@ export default {
 			],
 			rules: {
 				email: [
-					{ required: true, message: 'Поле обязательно', trigger: 'change' },
-					{ type: 'email', message: 'Email содержит опечатки', trigger: 'change' },
+					isRequired,
+					isEmail,
 				],
 				password: [
-					{ required: true, message: 'Поле обязательно', trigger: 'change' },
+					isRequired,
+					minLength(12),
 				],
 			},
 		}
@@ -252,6 +262,8 @@ export default {
 			}
 		},
 		async updatePassword() {
+			if (!this.$isFormValid('updatePasswordForm')) return
+
 			try {
 				await this.$confirm('Старый пароль будет перезаписан. Вы уверены?', {
 					confirmButtonText: 'Да',
