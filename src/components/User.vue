@@ -46,9 +46,9 @@
 				<InputPhone v-model="user.phone" format="ru"/>
 			</el-form-item>
 
-			<!-- <el-form-item v-if="!isCreationView" label="Зарегистрирован">
-				<el-input :value="toDateTimeFormat(user.registered)" disabled/>
-			</el-form-item> -->
+			<el-form-item v-if="!isCreationView" label="Зарегистрирован">
+				<el-input :value="user.created ? toDateTimeFormat(user.created) : null" disabled/>
+			</el-form-item>
 
 			<!-- <el-form-item label="Роль">
 				<el-select
@@ -134,6 +134,7 @@
 <script>
 import { mapState } from 'vuex'
 import { isRequired, isEmail, minLength } from 'Utils/validationRules'
+import { toDateTimeFormat } from 'Utils'
 
 export default {
 	name: 'User',
@@ -156,6 +157,7 @@ export default {
 				lastName: '',
 				password: '',
 				phone: '',
+				created: null,
 				active: true,
 				TISandboxToken: '',
 				TIRealToken: '',
@@ -208,6 +210,7 @@ export default {
 		}
 	},
 	methods: {
+		toDateTimeFormat,
 		async getUser() {
 			try {
 				this.user = (await this.$http.get(`/users/${this.userId}`)).data
@@ -232,7 +235,7 @@ export default {
 
 			try {
 				if (this.isCreationView) {
-					this.user.id = (await this.$http.post('/users', this.user)).data
+					this.user = (await this.$http.post('/users', this.user)).data
 				} else {
 					await this.$http.put(`/users/${this.userId}`, this.user)
 
