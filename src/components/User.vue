@@ -1,5 +1,7 @@
 <template>
 	<div v-loading.fullscreen="isLoading">
+		<el-divider content-position="left" class="mt-2">Общие</el-divider>
+
 		<el-form
 			ref="form"
 			:model="user"
@@ -65,6 +67,20 @@
 					<el-option label="Нет" :value="false"/>
 				</el-select>
 			</el-form-item>
+
+			<template v-if="isSelfEdit">
+				<el-form-item
+					v-for="token in tokensStructure"
+					:key="token.name"
+					:label="token.label"
+				>
+					<el-input
+						v-model="user[token.name]"
+						:placeholder="token.placeholder"
+						show-password
+					/>
+				</el-form-item>
+			</template>
 		</el-form>
 
 		<div>
@@ -135,7 +151,21 @@ export default {
 				password: '',
 				phone: '',
 				active: true,
+				TISandboxToken: '',
+				TIRealToken: '',
 			},
+			tokensStructure: [
+				{
+					label: 'Токен ТИ для торговли',
+					name: 'TIRealToken',
+					placeholder: 't.wTul5Ft...',
+				},
+				{
+					label: 'Токен ТИ для песочницы',
+					name: 'TISandboxToken',
+					placeholder: 't.7U2DIIO...',
+				},
+			],
 			rules: {
 				email: [
 					{ required: true, message: 'Поле обязательно', trigger: 'change' },
