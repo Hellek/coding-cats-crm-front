@@ -97,37 +97,28 @@
 				@click="createOrSave"
 			>{{ isCreationView ? 'Создать' : 'Сохранить' }}</el-button>
 
-			<el-popover
-				v-model="isUpdatePasswordVisible"
-				trigger="manual"
-			>
-				<div class="d-flex">
-					<el-input
-						v-model="user.password"
-						placeholder="Новый пароль"
-						show-password
-					/>
-
-					<el-button
-						type="success"
-						class="ml-4"
-						@click="updatePassword"
-					>Сохранить</el-button>
-				</div>
-
-				<el-button
-					slot="reference"
-					class="ml-4"
-					@click="isUpdatePasswordVisible = !isUpdatePasswordVisible"
-				>Сменить пароль</el-button>
-			</el-popover>
-
 			<el-button
 				v-if="!isCreationView && !isInitialUser"
 				:loading="isSending"
 				class="ml-4"
 				@click="removeUser"
 			>Удалить</el-button>
+		</div>
+
+		<div v-if="!isCreationView">
+
+			<el-divider content-position="left">Прочее</el-divider>
+
+			<div class="d-flex mb-4">
+				<el-input
+					v-model="user.password"
+					placeholder="Новый пароль"
+					show-password
+					class="max-width-base mr-4"
+				/>
+
+				<el-button @click="updatePassword">Сменить</el-button>
+			</div>
 		</div>
 	</div>
 </template>
@@ -150,7 +141,6 @@ export default {
 		return {
 			isSending: false,
 			isLoading: false,
-			isUpdatePasswordVisible: false,
 			user: {
 				email: '',
 				firstName: '',
@@ -263,11 +253,19 @@ export default {
 		},
 		async updatePassword() {
 			try {
+				await this.$confirm('Старый пароль будет перезаписан. Вы уверены?', {
+					confirmButtonText: 'Да',
+					cancelButtonText: 'Нет',
+					type: 'warning',
+				})
+
 				await this.$http.put('users/password', this.user)
 				this.$notify.success({ title: 'Пароль обновлён' })
-				this.isUpdatePasswordVisible = false
 			} catch (error) {
+				if (error === 'cancel') return
 				this.$notifyUserAboutError(error)
+			} finally {
+				this.user.password = ''
 			}
 		},
 		async removeUser() {
