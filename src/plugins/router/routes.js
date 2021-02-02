@@ -24,6 +24,15 @@ export default [
 		},
 	},
 	{
+		name: 'Instruments',
+		path: '/instruments',
+		component: () => import('Pages/Instruments'),
+		meta: {
+			isNav: true,
+			label: 'Инструменты',
+		},
+	},
+	{
 		name: 'RestTest',
 		path: '/rest-test',
 		component: () => import('Pages/RestTest'),
