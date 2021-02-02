@@ -24,6 +24,15 @@ export default [
 		},
 	},
 	{
+		name: 'Portfolio',
+		path: '/portfolio',
+		component: () => import('Pages/Portfolio'),
+		meta: {
+			isNav: true,
+			label: 'Портфель',
+		},
+	},
+	{
 		name: 'Instruments',
 		path: '/instruments',
 		component: () => import('Pages/Instruments'),
