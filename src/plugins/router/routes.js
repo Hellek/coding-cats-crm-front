@@ -15,12 +15,12 @@ export default [
 		component: () => import('Pages/Idea'),
 	},
 	{
-		name: 'TinkoffInvest',
-		path: '/tinkoff-invest',
-		component: () => import('Pages/TinkoffInvest'),
+		name: 'Operations',
+		path: '/operations',
+		component: () => import('Pages/Operations'),
 		meta: {
 			isNav: true,
-			label: 'TinkoffInvest',
+			label: 'Операции',
 		},
 	},
 	{
