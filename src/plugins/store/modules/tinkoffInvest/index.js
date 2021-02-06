@@ -2,6 +2,7 @@ function defaultState() {
 	return {
 		sandboxToken: localStorage.getItem('tinkoffInvest/sandboxToken') || '',
 		realToken: localStorage.getItem('tinkoffInvest/realToken') || '',
+		brokerAccountId: localStorage.getItem('tinkoffInvest/brokerAccountId') || null,
 	}
 }
 
@@ -16,6 +17,10 @@ export default {
 		setRealToken(state, token) {
 			state.realToken = token
 			localStorage.setItem('tinkoffInvest/realToken', token)
+		},
+		setBrokerAccountId(state, brokerAccountId) {
+			state.brokerAccountId = brokerAccountId
+			localStorage.setItem('tinkoffInvest/brokerAccountId', brokerAccountId)
 		},
 		dropState(state) {
 			Object.assign(state, defaultState())
