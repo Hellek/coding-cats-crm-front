@@ -60,3 +60,15 @@ h1, h2, h3, h4, h5, h6 {
 .el-form--inline .el-form-item {
 	margin-right: 12px;
 }
+
+.el-pagination {
+	padding: 0;
+
+	.el-select .el-input {
+		margin: 0;
+	}
+
+	.el-table + & {
+		margin-top: 16px;
+	}
+}
