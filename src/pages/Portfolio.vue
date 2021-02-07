@@ -39,12 +39,12 @@
 				<template slot-scope="scope">
 					<span
 						:class="scope.row.expectedYield.value > 0 ? 'color-success' : 'color-danger'"
-					>{{ scope.row.expectedYield.value }} {{ scope.row.expectedYield.currency }}</span>
+					>{{ scope.row.expectedYield.value }} {{ getCurrencySymbol(scope.row.expectedYield.currency) }}</span>
 				</template>
 			</el-table-column>
 
 			<el-table-column label="Средняя" width="110px">
-				<template slot-scope="scope">{{ scope.row.averagePositionPrice.value }} {{ scope.row.averagePositionPrice.currency }}</template>
+				<template slot-scope="scope">{{ scope.row.averagePositionPrice.value }} {{ getCurrencySymbol(scope.row.averagePositionPrice.currency) }}</template>
 			</el-table-column>
 		</el-table>
 	</el-card>
@@ -53,6 +53,7 @@
 <script>
 import Accounts from 'Components/TinkoffInvest/Accounts'
 import { mapState } from 'vuex'
+import { getCurrencySymbol } from 'Helpers/methods'
 
 export default {
 	name: 'Portfolio',
@@ -77,6 +78,7 @@ export default {
 		},
 	},
 	methods: {
+		getCurrencySymbol,
 		async setPortfolio() {
 			if (!this.brokerAccountId) return
 

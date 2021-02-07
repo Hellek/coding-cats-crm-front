@@ -17,3 +17,12 @@ export async function fetchOperations({
 		},
 	})).data
 }
+
+export function getCurrencySymbol(currency) {
+	switch (currency) {
+	case 'USD': return '$'
+	case 'RUB': return '₽'
+	case 'EUR': return '€'
+	default: return ''
+	}
+}

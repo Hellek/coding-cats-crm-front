@@ -111,7 +111,11 @@
 import Accounts from 'Components/TinkoffInvest/Accounts'
 import { mapState } from 'vuex'
 import { toDateTimeFormat } from 'Utils'
-import { fetchOperations } from 'Helpers/methods'
+
+import {
+	fetchOperations,
+	getCurrencySymbol,
+} from 'Helpers/methods'
 
 export default {
 	name: 'Operations',
@@ -194,6 +198,7 @@ export default {
 	},
 	methods: {
 		fetchOperations,
+		getCurrencySymbol,
 		async setOperations() {
 			if (!this.brokerAccountId) return
 
@@ -208,14 +213,6 @@ export default {
 				this.$notifyUserAboutError(error)
 			} finally {
 				this.isOperationsLoading = false
-			}
-		},
-		getCurrencySymbol(currency) {
-			switch (currency) {
-			case 'USD': return '$'
-			case 'RUB': return '₽'
-			case 'EUR': return '€'
-			default: return ''
 			}
 		},
 		formatOperationType(row) {
