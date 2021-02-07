@@ -111,6 +111,7 @@
 import Accounts from 'Components/TinkoffInvest/Accounts'
 import { mapState } from 'vuex'
 import { toDateTimeFormat } from 'Utils'
+import { fetchOperations } from 'Helpers/methods'
 
 export default {
 	name: 'Operations',
@@ -192,6 +193,7 @@ export default {
 		this.setOperations()
 	},
 	methods: {
+		fetchOperations,
 		async setOperations() {
 			if (!this.brokerAccountId) return
 
@@ -207,21 +209,6 @@ export default {
 			} finally {
 				this.isOperationsLoading = false
 			}
-		},
-		async fetchOperations({
-			from,
-			to,
-			figi = null,
-			brokerAccountId,
-		}) {
-			return (await this.$http.get('tinkoff-investments/operations', {
-				params: {
-					from,
-					to,
-					figi,
-					brokerAccountId,
-				},
-			})).data
 		},
 		getCurrencySymbol(currency) {
 			switch (currency) {
