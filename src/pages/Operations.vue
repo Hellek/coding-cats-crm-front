@@ -17,20 +17,7 @@
 			</el-form-item>
 
 			<el-form-item>
-				<el-select
-					v-model="filter.figi"
-					v-loading="isInstrumentsLoading"
-					placeholder="Тикер"
-					clearable
-					filterable
-				>
-					<el-option
-						v-for="i in figiList"
-						:key="i.figi"
-						:label="`${i.ticker} (${i.name})`"
-						:value="i.figi"
-					/>
-				</el-select>
+				<FigiSelect @selected="filter.figi = $event"/>
 			</el-form-item>
 		</el-form>
 
@@ -109,6 +96,7 @@
 
 <script>
 import Accounts from 'Components/TinkoffInvest/Accounts'
+import FigiSelect from 'Components/TinkoffInvest/FigiSelect'
 import { mapState } from 'vuex'
 import { toDateTimeFormat } from 'Utils'
 
@@ -121,6 +109,7 @@ export default {
 	name: 'Operations',
 	components: {
 		Accounts,
+		FigiSelect,
 	},
 	data() {
 		return {
@@ -175,14 +164,6 @@ export default {
 
 					return o
 				})
-		},
-		figiList() {
-			return [
-				...this.instruments.stocks,
-				...this.instruments.bonds,
-				...this.instruments.etfs,
-				...this.instruments.currencies,
-			]
 		},
 	},
 	watch: {
