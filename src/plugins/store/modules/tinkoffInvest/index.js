@@ -49,6 +49,8 @@ export default {
 			commit('setInstumentByType', { type, instruments })
 		},
 		async setAllInstuments({ state, commit, dispatch }) {
+			if (state.isInstrumentsLoading) return
+
 			try {
 				commit('setIsInstrumentsLoading', true)
 
