@@ -63,7 +63,7 @@ export default {
 	},
 	created() {
 		if (this.$route.query.instrumentType) this.instrumentType = this.$route.query.instrumentType
-		else this.setInstrumentType({ name: 'stocks' })
+		else this.setInstrumentType({ name: 'currencies' })
 	},
 	methods: {
 		setInstrumentType(tab) {
