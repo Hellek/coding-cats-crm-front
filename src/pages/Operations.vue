@@ -8,9 +8,9 @@
 			<el-form-item>
 				<el-date-picker
 					v-model="operationDatesProxy"
-					type="daterange"
-					format="dd.MM.yyyy"
-					:default-time="['00:00:00', '23:59:59']"
+					type="datetimerange"
+					:default-time="['10:00:00', '02:00:00']"
+					format="dd.MM.yyyy HH:mm:ss"
 					range-separator="по"
 					:clearable="false"
 				/>
@@ -116,8 +116,8 @@ export default {
 			isOperationsLoading: false,
 			operations: [],
 			filter: {
-				from: this.$dayjs().startOf('day').format(),
-				to: this.$dayjs().endOf('day').format(),
+				from: null,
+				to: null,
 				figi: null,
 			},
 			localFilter: {
@@ -174,14 +174,23 @@ export default {
 		},
 	},
 	async created() {
+		this.setTime()
 		await this.$store.dispatch('tinkoffInvest/setAllInstuments')
 		this.setOperations()
 	},
 	methods: {
 		fetchOperations,
 		getCurrencySymbol,
+		setTime() {
+			const hour = this.$dayjs().hour()
+			const showFinishedSession = hour < 6
+			const startOfDay = this.$dayjs().startOf('day')
+
+			this.filter.from = startOfDay.add(showFinishedSession ? -1 : 0, 'day').hour(10).format()
+			this.filter.to = startOfDay.add(showFinishedSession ? 0 : 1, 'day').hour(2).format()
+		},
 		async setOperations() {
-			if (!this.brokerAccountId) return
+			if (!this.brokerAccountId || !this.filter.from) return
 
 			this.isOperationsLoading = true
 
