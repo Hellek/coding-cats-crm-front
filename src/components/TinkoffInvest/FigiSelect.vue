@@ -2,7 +2,7 @@
 	<el-select
 		v-model="figi"
 		v-loading="isInstrumentsLoading"
-		placeholder="Тикер"
+		placeholder="Тикер / название"
 		clearable
 		filterable
 		@change="$emit('selected', $event)"
