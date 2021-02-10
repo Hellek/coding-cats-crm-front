@@ -66,7 +66,7 @@
 						class="d-flex justify-content-between"
 					>
 						<div>{{ scope.row.payment }} {{ getCurrencySymbol(scope.row.currency) }}</div>
-						<div class="color-info font-size-12">{{ scope.row.commission.value }}</div>
+						<div class="color-info font-size-12">{{ scope.row.commission ? scope.row.commission.value : '------' }}</div>
 					</div>
 				</template>
 			</el-table-column>
