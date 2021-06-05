@@ -240,10 +240,7 @@ export default {
 					await this.$http.put(`/users/${this.userId}`, this.user)
 
 					if (this.isSelfEdit) {
-						this.$store.commit('users/setUser', {
-							...this.currentUser,
-							...this.user,
-						})
+						await this.$store.dispatch('auth/authenticate', { refresh: true })
 					}
 				}
 
