@@ -18,6 +18,10 @@ export async function fetchOperations({
 	})).data
 }
 
+export async function syncOperations() {
+	return (await this.$http.post('tinkoff-investments/operations/sync')).data
+}
+
 export function getCurrencySymbol(currency) {
 	switch (currency) {
 	case 'USD': return '$'
