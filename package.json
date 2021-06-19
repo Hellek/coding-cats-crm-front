@@ -11,7 +11,7 @@
 		"build": "vue-cli-service build",
 		"lint": "vue-cli-service lint",
 		"lint:style": "vue-cli-service lint:style",
-		"npm:install": "npm install",
+		"yarn:install": "yarn",
 		"heroku:deploy": "git push heroku master --force",
 		"heroku:logs": "heroku logs --tail",
 		"heroku:open": "heroku open",
