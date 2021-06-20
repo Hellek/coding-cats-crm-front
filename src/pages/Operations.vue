@@ -177,8 +177,8 @@ export default {
 		},
 	},
 	async created() {
-		await this.syncOperations()
 		this.setTime()
+		await this.syncOperations()
 		await this.$store.dispatch('tinkoffInvest/setAllInstuments')
 	},
 	methods: {
