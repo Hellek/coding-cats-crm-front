@@ -63,6 +63,7 @@ import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
 import {
+	syncOperations,
 	fetchOperations,
 	getCurrencySymbol,
 } from 'Helpers/methods'
@@ -195,10 +196,12 @@ export default {
 		brokerAccountId: 'setOperations',
 		'filter.figi': 'setOperations',
 	},
-	created() {
+	async created() {
+		await this.syncOperations()
 		this.setOperations()
 	},
 	methods: {
+		syncOperations,
 		fetchOperations,
 		async setOperations() {
 			if (!this.hasRequiredFilters) return
