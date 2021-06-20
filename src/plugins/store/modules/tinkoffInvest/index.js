@@ -96,11 +96,13 @@ export default {
 				commit('setIsOperationsLoading', false)
 			}
 		},
-		async syncOperations({ commit }) {
+		async syncOperations({ state, commit }) {
 			commit('setIsOperationsLoading', true)
 
 			try {
-				return (await http.post('tinkoff-investments/operations/sync')).data
+				return (await http.post('tinkoff-investments/operations/sync', {
+					brokerAccountId: state.brokerAccountId,
+				})).data
 			} finally {
 				commit('setIsOperationsLoading', false)
 			}
