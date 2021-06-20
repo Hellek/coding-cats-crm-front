@@ -159,15 +159,6 @@ export default {
 					requests: [
 						{
 							method: 'POST',
-							query: 'development/table/operations',
-						},
-						{
-							method: 'DELETE',
-							query: 'development/table/operations',
-							divider: true,
-						},
-						{
-							method: 'POST',
 							query: 'development/table/instruments',
 						},
 						{
@@ -182,15 +173,6 @@ export default {
 						{
 							method: 'DELETE',
 							query: 'development/table/ideas',
-							divider: true,
-						},
-						{
-							method: 'POST',
-							query: 'development/table/users',
-						},
-						{
-							method: 'DELETE',
-							query: 'development/table/users',
 							divider: true,
 						},
 						{

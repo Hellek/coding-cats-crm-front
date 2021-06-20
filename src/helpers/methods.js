@@ -2,24 +2,27 @@ export async function fetchUsers() {
 	return (await this.$http.get('/users')).data
 }
 
-export async function fetchOperations({
-	from,
-	to,
-	figi = null,
-	brokerAccountId,
-}) {
-	return (await this.$http.get('tinkoff-investments/operations', {
-		params: {
-			from,
-			to,
-			figi,
-			brokerAccountId,
-		},
-	})).data
+export async function fetchOperations(params) {
+	try {
+		await this.$store.dispatch('tinkoffInvest/fetchOperations', params)
+	} catch (error) {
+		this.$notifyUserAboutError(error)
+	}
 }
 
 export async function syncOperations() {
-	return (await this.$http.post('tinkoff-investments/operations/sync')).data
+	try {
+		const { added } = await this.$store.dispatch('tinkoffInvest/syncOperations')
+
+		if (added === 0) return
+
+		this.$notify.success({
+			title: 'Операции синхронизированы',
+			message: `${added} новых записей`,
+		})
+	} catch (error) {
+		this.$notifyUserAboutError(error)
+	}
 }
 
 export function getCurrencySymbol(currency) {

@@ -101,6 +101,7 @@ import { mapState } from 'vuex'
 import { toDateTimeFormat } from 'Utils'
 
 import {
+	syncOperations,
 	fetchOperations,
 	getCurrencySymbol,
 } from 'Helpers/methods'
@@ -113,8 +114,6 @@ export default {
 	},
 	data() {
 		return {
-			isOperationsLoading: false,
-			operations: [],
 			filter: {
 				from: null,
 				to: null,
@@ -138,6 +137,10 @@ export default {
 			'isInstrumentsLoading',
 			'instruments',
 		]),
+		...mapState({
+			isOperationsLoading: state => state.tinkoffInvest.isOperationsLoading,
+			operations: state => state.tinkoffInvest.operations,
+		}),
 		operationDatesProxy: {
 			set(period) {
 				[this.filter.from, this.filter.to] = period
@@ -174,11 +177,12 @@ export default {
 		},
 	},
 	async created() {
+		await this.syncOperations()
 		this.setTime()
 		await this.$store.dispatch('tinkoffInvest/setAllInstuments')
-		this.setOperations()
 	},
 	methods: {
+		syncOperations,
 		fetchOperations,
 		getCurrencySymbol,
 		setTime() {
@@ -192,18 +196,10 @@ export default {
 		async setOperations() {
 			if (!this.brokerAccountId || !this.filter.from) return
 
-			this.isOperationsLoading = true
-
-			try {
-				this.operations = await this.fetchOperations({
-					...this.filter,
-					brokerAccountId: this.brokerAccountId,
-				})
-			} catch (error) {
-				this.$notifyUserAboutError(error)
-			} finally {
-				this.isOperationsLoading = false
-			}
+			await this.fetchOperations({
+				...this.filter,
+				brokerAccountId: this.brokerAccountId,
+			})
 		},
 		formatOperationType(row) {
 			switch (row.operationType) {
