@@ -17,7 +17,7 @@
 			</el-form-item>
 
 			<el-form-item>
-				<FigiSelect @selected="filter.figi = $event"/>
+				<FigiSelect v-model="filter.figi"/>
 			</el-form-item>
 		</el-form>
 
@@ -99,9 +99,9 @@ import Accounts from 'Components/TinkoffInvest/Accounts'
 import FigiSelect from 'Components/TinkoffInvest/FigiSelect'
 import { mapState } from 'vuex'
 import { toDateTimeFormat } from 'Utils'
+import { instrumentTypeNames, operationTypeNames } from 'Plugins/i18n'
 
 import {
-	syncOperations,
 	fetchOperations,
 	getCurrencySymbol,
 } from 'Helpers/methods'
@@ -114,6 +114,7 @@ export default {
 	},
 	data() {
 		return {
+			instrumentTypeNames,
 			filter: {
 				from: null,
 				to: null,
@@ -136,6 +137,7 @@ export default {
 			'brokerAccountId',
 			'isInstrumentsLoading',
 			'instruments',
+			'figiMap',
 		]),
 		...mapState({
 			isOperationsLoading: state => state.tinkoffInvest.isOperationsLoading,
@@ -153,18 +155,10 @@ export default {
 			return this.operations.filter(o => ['Buy', 'Sell'].includes(o.operationType))
 		},
 		buySellOperationsPaginated() {
-			const figiTickerMap = {}
-
 			return this.buySellOperations
 				.slice((this.localFilter.currentPage - 1) * this.localFilter.pageSize, this.localFilter.currentPage * this.localFilter.pageSize)
 				.map(o => {
-					// Берём из кэша найденные ранее по figi тикер
-					if (figiTickerMap[o.figi]) o.ticker = figiTickerMap[o.figi]
-					else {
-						figiTickerMap[o.figi] = this.instruments[this.instrumentTypeProxy[o.instrumentType]].find(i => i.figi === o.figi).ticker
-						o.ticker = figiTickerMap[o.figi]
-					}
-
+					o.ticker = this.figiMap[o.figi].ticker
 					return o
 				})
 		},
@@ -176,13 +170,10 @@ export default {
 			handler: 'setOperations',
 		},
 	},
-	async created() {
+	created() {
 		this.setTime()
-		await this.syncOperations()
-		await this.$store.dispatch('tinkoffInvest/setAllInstuments')
 	},
 	methods: {
-		syncOperations,
 		fetchOperations,
 		getCurrencySymbol,
 		setTime() {
@@ -202,27 +193,13 @@ export default {
 			})
 		},
 		formatOperationType(row) {
-			switch (row.operationType) {
-			case 'Buy': return 'Покупка'
-			case 'Sell': return 'Продажа'
-			case 'BrokerCommission': return 'Комиссия брокера'
-			case 'MarginCommission': return 'Комиссия за маржу'
-			case 'PayIn': return 'Пополнение счёта'
-			case 'PayOut': return 'Вывод денег со счёта'
-			default: return row.operationType
-			}
+			return operationTypeNames[row.operationType]
 		},
 		formatDate(row) {
 			return toDateTimeFormat(row.date)
 		},
 		formatInstrumentType(row) {
-			switch (row.instrumentType) {
-			case 'Stock': return 'Акция'
-			case 'Bond': return 'Облигация'
-			case 'Etf': return 'ETF'
-			case 'Currency': return 'Валюта'
-			default: return row.instrumentType
-			}
+			return this.instrumentTypeNames.singular[row.instrumentType]
 		},
 		formatQuantity(row) {
 			if (!row.quantityExecuted) return ''

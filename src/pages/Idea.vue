@@ -7,23 +7,11 @@
 			inline
 			label-position="top"
 		>
-			<el-form-item label="Тикер" prop="ticker">
-				<el-select
-					v-model="idea.ticker"
-					:loading="isTickersLoading"
-					:remote-method="suggestTickers"
-					filterable
-					remote
-					:disabled="isEditView"
+			<el-form-item label="Тикер" prop="figi">
+				<FigiSelect
+					v-model="idea.figi"
 					@change="createOrSave"
-				>
-					<el-option
-						v-for="i in instruments"
-						:key="i.ticker"
-						:label="i.ticker"
-						:value="i.ticker"
-					/>
-				</el-select>
+				/>
 			</el-form-item>
 
 			<el-form-item
@@ -108,12 +96,16 @@
 </template>
 
 <script>
+import FigiSelect from 'Components/TinkoffInvest/FigiSelect'
 import { toDateTimeFormat } from 'Utils'
 import { isRequired } from 'Utils/validationRules'
 import DisableComposition from 'KitDirectives/DisableComposition'
 
 export default {
 	name: 'Idea',
+	components: {
+		FigiSelect,
+	},
 	directives: {
 		DisableComposition,
 	},
@@ -121,19 +113,17 @@ export default {
 		return {
 			isSending: false,
 			isLoading: false,
-			isTickersLoading: false,
 			isAddingComment: false,
-			instruments: [],
 			idea: {
 				id: null,
-				ticker: '',
+				figi: '',
 				created: null,
 				active: true,
 				comment: '',
 				comments: [],
 			},
 			rules: {
-				ticker: [
+				figi: [
 					isRequired,
 				],
 			},
@@ -247,26 +237,12 @@ export default {
 
 				this.$router.push({ name: 'Ideas' })
 
-				this.$notify.success({ title: `Идея по ${this.idea.ticker} удалена` })
+				this.$notify.success({ title: `Идея по ${this.idea.figi} удалена` })
 			} catch (error) {
 				if (error === 'cancel') return
 				this.$notifyUserAboutError(error)
 			} finally {
 				this.isSending = false
-			}
-		},
-		async suggestTickers(queryString) {
-			try {
-				this.isTickersLoading = true
-
-				this.instruments = (await this.$http.get('instruments', {
-					params: { queryString },
-				})).data
-			} catch (error) {
-				this.$notifyUserAboutError(error)
-				this.instruments = []
-			} finally {
-				this.isTickersLoading = false
 			}
 		},
 	},

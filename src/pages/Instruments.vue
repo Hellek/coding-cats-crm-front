@@ -1,18 +1,27 @@
 <template>
-	<el-card v-loading="instrumentsLoading">
+	<el-card v-loading="isInstrumentsLoading">
 		<el-tabs
 			v-model="instrumentType"
 			type="card"
 			@tab-click="setInstrumentType"
 		>
 			<el-tab-pane
-				v-for="(label, type) in instrumentTypes"
+				v-for="(label, type) in instrumentTypeNames.plural"
 				:key="type"
 				:label="label"
 				:name="type"
 			>
+				<el-pagination
+					:current-page.sync="localFilter.currentPage"
+					:page-size.sync="localFilter.pageSize"
+					:page-sizes="[10, localFilter.pageSize, 50, 100, 200, 400]"
+					layout="total, sizes, prev, pager, next"
+					:total="instruments[instrumentType].length"
+					background
+				/>
+
 				<el-table
-					:data="instruments[instrumentType]"
+					:data="instrumentsPaginated"
 					stripe
 				>
 					<el-table-column prop="ticker" label="Тикер"/>
@@ -41,25 +50,30 @@
 </template>
 
 <script>
-const instrumentTypes = {
-	stocks: 'Акции',
-	currencies: 'Валюты',
-	etfs: 'ETF',
-	bonds: 'Облигации',
-}
+import { mapState } from 'vuex'
+import { instrumentTypeNames } from 'Plugins/i18n'
 
 export default {
 	name: 'Instruments',
 	data() {
 		return {
-			instrumentsLoading: true,
+			instrumentTypeNames,
 			instrumentType: '',
-			instrumentTypes,
-			instruments: {},
+			localFilter: {
+				currentPage: 1,
+				pageSize: 15,
+			},
 		}
 	},
-	watch: {
-		instrumentType: 'setInstumentsByType',
+	computed: {
+		...mapState('tinkoffInvest', [
+			'isInstrumentsLoading',
+			'instruments',
+		]),
+		instrumentsPaginated() {
+			return this.instruments[this.instrumentType]
+				.slice((this.localFilter.currentPage - 1) * this.localFilter.pageSize, this.localFilter.currentPage * this.localFilter.pageSize)
+		},
 	},
 	created() {
 		if (this.$route.query.instrumentType) this.instrumentType = this.$route.query.instrumentType
@@ -76,21 +90,6 @@ export default {
 					instrumentType: tab.name,
 				},
 			})
-		},
-		async setInstumentsByType(type) {
-			this.instrumentsLoading = true
-
-			try {
-				if (this.instruments[type]) return
-
-				const { data } = await this.$http.get(`tinkoff-investments/instruments/${type}`)
-
-				this.$set(this.instruments, type, data)
-			} catch (error) {
-				this.$notifyUserAboutError(error)
-			} finally {
-				this.instrumentsLoading = false
-			}
 		},
 	},
 }

@@ -51,6 +51,7 @@
 
 <script>
 import { toDateTimeFormat } from 'Utils'
+import { mapState } from 'vuex'
 
 export default {
 	name: 'Journal',
@@ -72,6 +73,9 @@ export default {
 		}
 	},
 	computed: {
+		...mapState('tinkoffInvest', [
+			'figiMap',
+		]),
 		filteredIdeas() {
 			return this.ideas.filter(idea => idea.active === this.filter.active)
 		},
@@ -84,7 +88,12 @@ export default {
 	methods: {
 		async setIdeas() {
 			try {
-				this.ideas = (await this.$http.get('ideas')).data
+				const { data } = await this.$http.get('ideas')
+
+				this.ideas = data.map(idea => {
+					idea.ticker = this.figiMap[idea.figi].ticker
+					return idea
+				})
 			} catch (error) {
 				this.$notifyUserAboutError(error)
 			}

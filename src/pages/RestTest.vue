@@ -154,41 +154,6 @@ export default {
 						},
 					],
 				},
-				{
-					title: 'Development',
-					requests: [
-						{
-							method: 'POST',
-							query: 'development/table/instruments',
-						},
-						{
-							method: 'DELETE',
-							query: 'development/table/instruments',
-							divider: true,
-						},
-						{
-							method: 'POST',
-							query: 'development/table/ideas',
-						},
-						{
-							method: 'DELETE',
-							query: 'development/table/ideas',
-							divider: true,
-						},
-						{
-							method: 'POST',
-							query: 'development/table/roles',
-						},
-						{
-							method: 'PUT',
-							query: 'development/table/roles',
-						},
-						{
-							method: 'DELETE',
-							query: 'development/table/roles',
-						},
-					],
-				},
 			],
 		}
 	},

@@ -5,7 +5,7 @@
 		placeholder="Тикер / название"
 		clearable
 		filterable
-		@change="$emit('selected', $event)"
+		@change="setFigi"
 	>
 		<el-option
 			v-for="i in figiList"
@@ -21,6 +21,12 @@ import { mapState } from 'vuex'
 
 export default {
 	name: 'FigiSelect',
+	props: {
+		value: {
+			type: String,
+			default: null,
+		},
+	},
 	data() {
 		return {
 			figi: null,
@@ -40,8 +46,17 @@ export default {
 			]
 		},
 	},
-	created() {
-		this.$store.dispatch('tinkoffInvest/setAllInstuments')
+	watch: {
+		value(newValue) {
+			if (this.newValue === this.figi) return
+			this.figi = newValue
+		},
+	},
+	methods: {
+		setFigi(figi) {
+			this.$emit('input', figi)
+			this.$emit('change', figi)
+		},
 	},
 }
 </script>

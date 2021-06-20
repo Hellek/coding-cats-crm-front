@@ -4,8 +4,8 @@
 			<Accounts class="mb-4 mr-3"/>
 
 			<FigiSelect
+				v-model="filter.figi"
 				class="mb-4"
-				@selected="filter.figi = $event"
 			/>
 		</div>
 
@@ -63,7 +63,6 @@ import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
 import {
-	syncOperations,
 	fetchOperations,
 	getCurrencySymbol,
 } from 'Helpers/methods'
@@ -196,12 +195,10 @@ export default {
 		brokerAccountId: 'setOperations',
 		'filter.figi': 'setOperations',
 	},
-	async created() {
-		await this.syncOperations()
+	created() {
 		this.setOperations()
 	},
 	methods: {
-		syncOperations,
 		fetchOperations,
 		async setOperations() {
 			if (!this.hasRequiredFilters) return

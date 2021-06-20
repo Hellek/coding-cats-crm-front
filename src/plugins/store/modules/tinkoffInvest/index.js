@@ -5,6 +5,7 @@ function defaultState() {
 		brokerAccountId: localStorage.getItem('tinkoffInvest/brokerAccountId') || null,
 		isInstrumentsLoading: false,
 		isOperationsLoading: false,
+		isAccountsLoading: false,
 		instruments: {
 			stocks: [],
 			bonds: [],
@@ -12,6 +13,8 @@ function defaultState() {
 			currencies: [],
 		},
 		operations: [],
+		accounts: [],
+		figiMap: {},
 	}
 }
 
@@ -34,6 +37,15 @@ export default {
 		},
 		setOperations(state, operations) {
 			state.operations = operations
+		},
+		setAccounts(state, accounts) {
+			state.accounts = accounts
+		},
+		setIsAccountsLoading(state, isAccountsLoading) {
+			state.isAccountsLoading = isAccountsLoading
+		},
+		setFigiMap(state, figiMap) {
+			state.figiMap = figiMap
 		},
 		dropState(state) {
 			Object.assign(state, defaultState())
@@ -69,6 +81,16 @@ export default {
 				})
 
 				await Promise.all(promises)
+
+				const figiMap = {}
+
+				Object.keys(state.instruments).forEach(iName => {
+					state.instruments[iName].forEach(i => {
+						figiMap[i.figi] = i
+					})
+				})
+
+				commit('setFigiMap', figiMap)
 			} finally {
 				commit('setIsInstrumentsLoading', false)
 			}
@@ -105,6 +127,30 @@ export default {
 				})).data
 			} finally {
 				commit('setIsOperationsLoading', false)
+			}
+		},
+		async setAccounts({ state, commit }) {
+			try {
+				commit('setIsAccountsLoading', true)
+
+				const accounts = (await http.get('tinkoff-investments/accounts')).data
+
+				accounts.forEach(acc => {
+					switch (acc.brokerAccountType) {
+					case 'Tinkoff': acc.label = 'Основной счёт'; break
+					case 'TinkoffIis': acc.label = 'ИИС'; break
+					default: break
+					}
+				})
+
+				commit('setAccounts', accounts)
+
+				// Устанавливаем счет по умолчанию, если не было
+				if (!state.brokerAccountId && accounts[0]) {
+					commit('setBrokerAccountId', accounts[0].brokerAccountId)
+				}
+			} finally {
+				commit('setIsAccountsLoading', false)
 			}
 		},
 	},
