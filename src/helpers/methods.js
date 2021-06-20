@@ -10,7 +10,7 @@ export async function fetchOperations(params) {
 	}
 }
 
-export async function syncOperations() {
+export async function syncOperations(attempts = 3) {
 	try {
 		const { added } = await this.$store.dispatch('tinkoffInvest/syncOperations')
 
@@ -21,7 +21,11 @@ export async function syncOperations() {
 			message: `${added} новых записей`,
 		})
 	} catch (error) {
-		this.$notifyUserAboutError(error)
+		if (attempts > 0) {
+			syncOperations(attempts - 1)
+		} else {
+			this.$notifyUserAboutError('Ошибка синхронизации сделок')
+		}
 	}
 }
 
