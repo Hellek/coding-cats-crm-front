@@ -24,6 +24,15 @@ export default [
 		},
 	},
 	{
+		name: 'Trades',
+		path: '/trades',
+		component: () => import('Pages/Trades'),
+		meta: {
+			isNav: true,
+			label: 'Сделки (бета)',
+		},
+	},
+	{
 		name: 'Portfolio',
 		path: '/portfolio',
 		component: () => import('Pages/Portfolio'),

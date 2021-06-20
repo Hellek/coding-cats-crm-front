@@ -196,7 +196,7 @@ export default {
 		async setOperations() {
 			if (!this.brokerAccountId || !this.filter.from) return
 
-			await this.fetchOperations({
+			this.fetchOperations({
 				...this.filter,
 				brokerAccountId: this.brokerAccountId,
 			})
