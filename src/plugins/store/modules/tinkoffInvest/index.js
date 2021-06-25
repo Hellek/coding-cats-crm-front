@@ -1,8 +1,13 @@
 import { http } from 'KitPlugins/http'
+import { getTodaySessionTime } from 'Utils'
 
 function defaultState() {
 	return {
 		brokerAccountId: localStorage.getItem('tinkoffInvest/brokerAccountId') || null,
+		filter: {
+			...getTodaySessionTime(),
+			figi: null,
+		},
 		isInstrumentsLoading: false,
 		isOperationsLoading: false,
 		isAccountsLoading: false,
@@ -40,6 +45,13 @@ export default {
 		},
 		setAccounts(state, accounts) {
 			state.accounts = accounts
+		},
+		setFilterFigi(state, figi) {
+			state.filter.figi = figi
+		},
+		setFilterTime(state, { from, to }) {
+			state.filter.from = from
+			state.filter.to = to
 		},
 		setIsAccountsLoading(state, isAccountsLoading) {
 			state.isAccountsLoading = isAccountsLoading

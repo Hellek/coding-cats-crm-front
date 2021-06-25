@@ -2,9 +2,15 @@ export async function fetchUsers() {
 	return (await this.$http.get('/users')).data
 }
 
-export async function fetchOperations(params) {
+export async function fetchOperations() {
+	const { brokerAccountId, filter } = this.$store.state.tinkoffInvest
+	if (!brokerAccountId || !filter.from) return
+
 	try {
-		await this.$store.dispatch('tinkoffInvest/fetchOperations', params)
+		await this.$store.dispatch('tinkoffInvest/fetchOperations', {
+			...filter,
+			brokerAccountId,
+		})
 	} catch (error) {
 		this.$notifyUserAboutError(error)
 	}

@@ -1,28 +1,8 @@
 <template>
 	<div>
-		<el-form :inline="true">
-			<el-form-item>
-				<Accounts/>
-			</el-form-item>
-
-			<el-form-item>
-				<el-date-picker
-					v-model="operationDatesProxy"
-					type="datetimerange"
-					:default-time="['10:00:00', '02:00:00']"
-					format="dd.MM.yyyy HH:mm:ss"
-					range-separator="по"
-					:clearable="false"
-				/>
-			</el-form-item>
-
-			<el-form-item>
-				<FigiSelect v-model="filter.figi"/>
-			</el-form-item>
-		</el-form>
+		<OperationsFilter/>
 
 		<el-table
-			v-if="brokerAccountId"
 			v-loading="isInstrumentsLoading && isOperationsLoading"
 			:data="buySellOperationsPaginated"
 			size="mini"
@@ -95,31 +75,23 @@
 </template>
 
 <script>
-import Accounts from 'Components/TinkoffInvest/Accounts'
-import FigiSelect from 'Components/TinkoffInvest/FigiSelect'
+import OperationsFilter from 'Components/TinkoffInvest/OperationsFilter'
 import { mapState } from 'vuex'
 import { toDateTimeFormat } from 'Utils'
 import { instrumentTypeNames, operationTypeNames } from 'Plugins/i18n'
 
 import {
-	fetchOperations,
 	getCurrencySymbol,
 } from 'Helpers/methods'
 
 export default {
 	name: 'Operations',
 	components: {
-		Accounts,
-		FigiSelect,
+		OperationsFilter,
 	},
 	data() {
 		return {
 			instrumentTypeNames,
-			filter: {
-				from: null,
-				to: null,
-				figi: null,
-			},
 			localFilter: {
 				currentPage: 1,
 				pageSize: 20,
@@ -134,7 +106,6 @@ export default {
 	},
 	computed: {
 		...mapState('tinkoffInvest', [
-			'brokerAccountId',
 			'isInstrumentsLoading',
 			'instruments',
 			'figiMap',
@@ -143,14 +114,6 @@ export default {
 			isOperationsLoading: state => state.tinkoffInvest.isOperationsLoading,
 			operations: state => state.tinkoffInvest.operations,
 		}),
-		operationDatesProxy: {
-			set(period) {
-				[this.filter.from, this.filter.to] = period
-			},
-			get() {
-				return [this.filter.from, this.filter.to]
-			},
-		},
 		buySellOperations() {
 			return this.operations.filter(o => ['Buy', 'Sell'].includes(o.operationType))
 		},
@@ -163,35 +126,8 @@ export default {
 				})
 		},
 	},
-	watch: {
-		brokerAccountId: 'setOperations',
-		filter: {
-			deep: true,
-			handler: 'setOperations',
-		},
-	},
-	created() {
-		this.setTime()
-	},
 	methods: {
-		fetchOperations,
 		getCurrencySymbol,
-		setTime() {
-			const hour = this.$dayjs().hour()
-			const showFinishedSession = hour < 6
-			const startOfDay = this.$dayjs().startOf('day')
-
-			this.filter.from = startOfDay.add(showFinishedSession ? -1 : 0, 'day').hour(10).format()
-			this.filter.to = startOfDay.add(showFinishedSession ? 0 : 1, 'day').hour(2).format()
-		},
-		async setOperations() {
-			if (!this.brokerAccountId || !this.filter.from) return
-
-			this.fetchOperations({
-				...this.filter,
-				brokerAccountId: this.brokerAccountId,
-			})
-		},
 		formatOperationType(row) {
 			return operationTypeNames[row.operationType]
 		},

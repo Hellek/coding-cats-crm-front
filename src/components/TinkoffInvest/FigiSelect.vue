@@ -47,9 +47,12 @@ export default {
 		},
 	},
 	watch: {
-		value(newValue) {
-			if (this.newValue === this.figi) return
-			this.figi = newValue
+		value: {
+			immediate: true,
+			handler(newValue) {
+				if (this.newValue === this.figi) return
+				this.figi = newValue
+			},
 		},
 	},
 	methods: {

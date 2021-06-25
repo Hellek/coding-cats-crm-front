@@ -1,13 +1,6 @@
 <template>
 	<div class="h-100p d-flex flex-column">
-		<div>
-			<Accounts class="mb-4 mr-3"/>
-
-			<FigiSelect
-				v-model="filter.figi"
-				class="mb-4"
-			/>
-		</div>
+		<OperationsFilter/>
 
 		<el-card
 			v-if="isOperationsLoading || operations.length"
@@ -55,15 +48,13 @@
 </template>
 
 <script>
-import Accounts from 'Components/TinkoffInvest/Accounts'
-import FigiSelect from 'Components/TinkoffInvest/FigiSelect'
+import OperationsFilter from 'Components/TinkoffInvest/OperationsFilter'
 import { mapState } from 'vuex'
 import { dayjs } from 'KitPlugins/dayjs'
 import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
 import {
-	fetchOperations,
 	getCurrencySymbol,
 } from 'Helpers/methods'
 
@@ -73,30 +64,13 @@ dayjs.extend(duration)
 export default {
 	name: 'Operations',
 	components: {
-		Accounts,
-		FigiSelect,
-	},
-	data() {
-		return {
-			filter: {
-				from: this.$dayjs('2016-01-01').startOf('day').format(),
-				to: this.$dayjs().endOf('day').format(),
-				// figi: 'BBG000N9MNX3',
-				figi: null,
-			},
-		}
+		OperationsFilter,
 	},
 	computed: {
-		...mapState('tinkoffInvest', [
-			'brokerAccountId',
-		]),
 		...mapState({
 			isOperationsLoading: state => state.tinkoffInvest.isOperationsLoading,
 			operations: state => state.tinkoffInvest.operations,
 		}),
-		hasRequiredFilters() {
-			return this.brokerAccountId && this.filter.figi
-		},
 		instrument() {
 			return {
 				currency: this.operations[0].currency,
@@ -189,24 +163,6 @@ export default {
 				lossPositionsCount,
 				profitPositionsCount,
 			}
-		},
-	},
-	watch: {
-		brokerAccountId: 'setOperations',
-		'filter.figi': 'setOperations',
-	},
-	created() {
-		this.setOperations()
-	},
-	methods: {
-		fetchOperations,
-		async setOperations() {
-			if (!this.hasRequiredFilters) return
-
-			this.fetchOperations({
-				...this.filter,
-				brokerAccountId: this.brokerAccountId,
-			})
 		},
 	},
 }
