@@ -77,3 +77,37 @@ h1, h2, h3, h4, h5, h6 {
 	line-height: 1em;
 	padding-bottom: 8px;
 }
+
+@-webkit-keyframes fade {
+	100% { opacity: 1; }
+	90% { opacity: 0.9; }
+	80% { opacity: 0.8; }
+	70% { opacity: 0.7; }
+	60% { opacity: 0.6; }
+	50% { opacity: 0.5; }
+	40% { opacity: 0.4; }
+	30% { opacity: 0.3; }
+	20% { opacity: 0.2; }
+	10% { opacity: 0.1; }
+	0% { opacity: 0; }
+}
+
+@keyframes fade {
+	100% { opacity: 1; }
+	90% { opacity: 0.9; }
+	80% { opacity: 0.8; }
+	70% { opacity: 0.7; }
+	60% { opacity: 0.6; }
+	50% { opacity: 0.5; }
+	40% { opacity: 0.4; }
+	30% { opacity: 0.3; }
+	20% { opacity: 0.2; }
+	10% { opacity: 0.1; }
+	0% { opacity: 0; }
+}
+
+.animate-opacity {
+	-webkit-animation: fade 0.8s infinite alternate;
+	animation: fade 0.8s infinite alternate;
+	-moz-animation: fade 0.8s infinite alternate;
+}

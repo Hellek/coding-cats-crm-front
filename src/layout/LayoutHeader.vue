@@ -27,7 +27,7 @@
 			/>
 		</el-drawer>
 
-		<div>
+		<div class="d-flex align-items-center">
 			<!-- <ThemeSwitcher/> -->
 
 			<!-- <el-button
@@ -35,6 +35,15 @@
 				circle
 				@click="showChat"
 			/> -->
+
+			<el-button
+				v-if="isSyncProcess"
+				type="warning"
+				class="animate-opacity"
+				plain
+			>
+				Синхронизация
+			</el-button>
 
 			<el-button
 				:loading="isUnauthorizing"
@@ -53,6 +62,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
 	name: 'LayoutHeader',
 	components: {
@@ -66,6 +77,11 @@ export default {
 			isDrawerVisible: false,
 			isChatVisible: false,
 		}
+	},
+	computed: {
+		...mapState('tinkoffInvest', [
+			'isSyncProcess',
+		]),
 	},
 	methods: {
 		async unauthorize() {

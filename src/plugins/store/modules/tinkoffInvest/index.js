@@ -10,6 +10,7 @@ function defaultState() {
 		},
 		isInstrumentsLoading: false,
 		isUsedFigiListLoading: false,
+		isSyncProcess: false,
 		isOperationsLoading: false,
 		isAccountsLoading: false,
 		isPortfolioLoading: false,
@@ -54,6 +55,9 @@ export default {
 		},
 		setIsUsedFigiListLoading(state, isUsedFigiListLoading) {
 			state.isUsedFigiListLoading = isUsedFigiListLoading
+		},
+		setIsSyncProcess(state, isSyncProcess) {
+			state.isSyncProcess = isSyncProcess
 		},
 		setOperations(state, operations) {
 			state.operations = operations
@@ -156,14 +160,14 @@ export default {
 			}
 		},
 		async syncOperations({ state, commit }) {
-			commit('setIsOperationsLoading', true)
+			commit('setIsSyncProcess', true)
 
 			try {
 				return (await http.post('tinkoff-investments/operations/sync', {
 					brokerAccountId: state.brokerAccountId,
 				})).data
 			} finally {
-				commit('setIsOperationsLoading', false)
+				commit('setIsSyncProcess', false)
 			}
 		},
 		async setAccounts({ state, commit }) {
