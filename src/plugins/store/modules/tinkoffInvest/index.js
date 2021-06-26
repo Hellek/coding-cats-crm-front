@@ -20,7 +20,7 @@ function defaultState() {
 			currencies: [],
 		},
 		operations: [],
-		accounts: [],
+		accounts: JSON.parse(localStorage.getItem('tinkoffInvest/accounts')) || [],
 		portfolio: {},
 		figiMap: {},
 		usedFigiList: [],
@@ -63,6 +63,7 @@ export default {
 		},
 		setAccounts(state, accounts) {
 			state.accounts = accounts
+			localStorage.setItem('tinkoffInvest/accounts', JSON.stringify(accounts))
 		},
 		setPortfolio(state, portfolio) {
 			state.portfolio = portfolio
@@ -167,17 +168,21 @@ export default {
 		},
 		async setAccounts({ state, commit }) {
 			try {
-				commit('setIsAccountsLoading', true)
+				let accounts = JSON.parse(localStorage.getItem('tinkoffInvest/accounts'))
 
-				const accounts = (await http.get('tinkoff-investments/accounts')).data
+				if (!accounts) {
+					commit('setIsAccountsLoading', true)
 
-				accounts.forEach(acc => {
-					switch (acc.brokerAccountType) {
-					case 'Tinkoff': acc.label = 'Основной счёт'; break
-					case 'TinkoffIis': acc.label = 'ИИС'; break
-					default: break
-					}
-				})
+					accounts = (await http.get('tinkoff-investments/accounts')).data
+
+					accounts.forEach(acc => {
+						switch (acc.brokerAccountType) {
+						case 'Tinkoff': acc.label = 'Основной счёт'; break
+						case 'TinkoffIis': acc.label = 'ИИС'; break
+						default: break
+						}
+					})
+				}
 
 				commit('setAccounts', accounts)
 
