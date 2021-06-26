@@ -80,6 +80,7 @@
 					v-for="token in tokensStructure"
 					:key="token.name"
 					:label="token.label"
+					:prop="token.name"
 				>
 					<el-input
 						v-model="user[token.name]"
@@ -135,6 +136,7 @@
 import { mapState } from 'vuex'
 import { isRequired, isEmail, minLength } from 'Utils/validationRules'
 import { toDateTimeFormat } from 'Utils'
+import { syncOperations } from 'Helpers/methods'
 
 export default {
 	name: 'User',
@@ -162,6 +164,7 @@ export default {
 				TISandboxToken: '',
 				TIRealToken: '',
 			},
+			hasRealTokenOnUserLoaded: false,
 			tokensStructure: [
 				{
 					label: 'Токен ТИ для торговли',
@@ -178,6 +181,9 @@ export default {
 				email: [
 					isRequired,
 					isEmail,
+				],
+				TIRealToken: [
+					isRequired,
 				],
 				password: [
 					isRequired,
@@ -201,16 +207,33 @@ export default {
 		},
 	},
 	async created() {
+		let wasCreation = false
+
 		if (this.isCreationView) {
 			this.user.password = this.generatePassword()
+			wasCreation = true
 		} else {
 			this.isLoading = true
 			await this.getUser()
+			this.hasRealTokenOnUserLoaded = !!this.user.TIRealToken
+			this.$isFormValid('form')
 			this.isLoading = false
+		}
+
+		if (!wasCreation && !this.user.TIRealToken) {
+			setTimeout(() => {
+				this.$notify.warning({
+					title: 'После сохранения токена запустится синхронизация сделок',
+					dangerouslyUseHTMLString: true,
+					message: 'Это может занять несколько минут, если у вас большое кол-во сделок или сервер Тинькофф Инвестиций перегружен.<br><br>Cинхронизациz будет запускаться при каждом входе в систему или обновлении страницы',
+					duration: 0,
+				})
+			}, 1500)
 		}
 	},
 	methods: {
 		toDateTimeFormat,
+		syncOperations,
 		async getUser() {
 			try {
 				this.user = (await this.$http.get(`/users/${this.userId}`)).data
@@ -241,6 +264,18 @@ export default {
 
 					if (this.isSelfEdit) {
 						await this.$store.dispatch('auth/authenticate', { refresh: true })
+					}
+
+					if (!this.hasRealTokenOnUserLoaded) {
+						this.$store.dispatch('navs/setNavs', { router: this.$router })
+						this.syncOperations()
+
+						setTimeout(() => {
+							this.$notify.warning({
+								title: 'Синхронизация сделок запущена, по окончании вы увидите уведомление',
+								duration: 2000,
+							})
+						}, 20)
 					}
 				}
 

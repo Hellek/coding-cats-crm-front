@@ -129,7 +129,6 @@ export default {
 			const instrumentTrades = []
 
 			this.buySellNotDeclinedSortedOps.forEach(ops => {
-				console.log(ops)
 				// Bugfix у валюты очень редко не бывает трейдов
 				if (ops.trades === null) {
 					instrumentTrades.push({

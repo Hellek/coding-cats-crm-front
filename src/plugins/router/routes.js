@@ -2,10 +2,10 @@ export default [
 	{
 		name: 'Ideas',
 		path: '/ideas',
-		alias: '/',
 		component: () => import('Pages/Ideas'),
 		meta: {
 			isNav: true,
+			requireToken: true,
 			label: 'Идеи',
 		},
 	},
@@ -13,6 +13,10 @@ export default [
 		name: 'Idea',
 		path: '/idea/:id?',
 		component: () => import('Pages/Idea'),
+		meta: {
+			requireToken: true,
+			label: 'Идея',
+		},
 	},
 	{
 		name: 'Operations',
@@ -20,15 +24,18 @@ export default [
 		component: () => import('Pages/Operations'),
 		meta: {
 			isNav: true,
+			requireToken: true,
 			label: 'Операции',
 		},
 	},
 	{
 		name: 'Trades',
 		path: '/trades',
+		alias: '/',
 		component: () => import('Pages/Trades'),
 		meta: {
 			isNav: true,
+			requireToken: true,
 			label: 'Сделки (бета)',
 		},
 	},
@@ -38,6 +45,7 @@ export default [
 		component: () => import('Pages/Portfolio'),
 		meta: {
 			isNav: true,
+			requireToken: true,
 			label: 'Портфель',
 		},
 	},
@@ -47,6 +55,7 @@ export default [
 		component: () => import('Pages/Instruments'),
 		meta: {
 			isNav: true,
+			requireToken: true,
 			label: 'Инструменты',
 		},
 	},

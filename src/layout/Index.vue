@@ -61,7 +61,14 @@ export default {
 		syncOperations,
 		async setAppUtilsLoading() {
 			if (!this.isAuthorized) return
-			if (!this.currentUser.TIRealToken && !this.currentUser.TISandboxToken) return
+
+			if (!this.currentUser.TIRealToken && !this.currentUser.TISandboxToken) {
+				if (this.$route.name !== 'Settings') this.$router.push({ name: 'Settings' })
+
+				this.$notifyUserAboutError('Для работы с сервисом необходимо указать токен Тинькофф Инвестиции')
+
+				return
+			}
 
 			try {
 				this.appUtilsLoading = true

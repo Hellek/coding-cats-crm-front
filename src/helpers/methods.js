@@ -28,10 +28,17 @@ export async function syncOperations(attempts = 3) {
 		})
 	} catch (error) {
 		if (attempts > 0) {
-			syncOperations(attempts - 1)
-		} else {
-			this.$notifyUserAboutError('Ошибка синхронизации сделок')
+			setTimeout(() => {
+				syncOperations(attempts - 1)
+			}, 1000)
+
+			return
 		}
+
+		this.$notifyUserAboutError({
+			title: 'Ошибка синхронизации сделок',
+			message: error,
+		})
 	}
 }
 
