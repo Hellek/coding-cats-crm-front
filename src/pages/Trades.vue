@@ -6,7 +6,9 @@
 			<template v-if="operations.length && !isOperationsLoading">
 				<div class="mb-3" :class="isResultProfitable ? 'color-success' : 'color-danger'">
 					<span>{{ isResultProfitable ? 'Доход' : 'Убыток' }}</span>
-					<span> по инструменту: {{ instrumentSeparatedTrades.instrumentPriceTotal }} {{ instrument.sign }}</span>
+					<span> по инструменту: {{ instrumentSeparatedTrades.instrumentTotalProfit }}{{ instrument.sign }}</span>
+					<div class="mt-3">Проторговано: {{ instrumentSeparatedTrades.instrumentTotalTurnover }}{{ instrument.sign }}</div>
+					<div class="mt-3">Эффективность: {{ instrumentSeparatedTrades.instrumentTotalROI }}%</div>
 				</div>
 
 				<div class="mb-3">Закрыто позиций {{ instrumentSeparatedTrades.closedTotal }}, убыточных {{ instrumentSeparatedTrades.lossPositionsCount }}, прибыльных {{ instrumentSeparatedTrades.profitPositionsCount }}</div>
@@ -18,6 +20,12 @@
 					<el-table-column
 						prop="tradesCount"
 						label="Кол-во сделок"
+						width="120px"
+					/>
+
+					<el-table-column
+						prop="turnover"
+						label="Оборот"
 						width="120px"
 					/>
 
@@ -80,7 +88,7 @@ export default {
 			}
 		},
 		isResultProfitable() {
-			return this.instrumentSeparatedTrades.instrumentPriceTotal >= 0
+			return this.instrumentSeparatedTrades.instrumentTotalProfit >= 0
 		},
 		buySellNotDeclinedSortedOps() {
 			return this.operations
@@ -133,10 +141,13 @@ export default {
 		},
 		instrumentSeparatedTrades() {
 			const instrumentPortfolioPrice = this.instrumentPortfolio.balance ? (this.instrumentPortfolio.averagePositionPrice.value * this.instrumentPortfolio.balance) : 0
-			let instrumentPriceTotal = 0
+			let instrumentTotalProfit = 0
+			let instrumentTotalTurnover = 0
 			const positions = []
 			let openedPositionCount = 0
 			let balance = 0
+
+			console.log(this.instrumentTrades)
 
 			this.instrumentTrades.forEach(trade => {
 				if (balance === 0) {
@@ -156,6 +167,7 @@ export default {
 
 			positions.forEach((pos, i) => {
 				let priceTotal = -pos.trades.reduce((prev, current) => prev + (current.quantity * current.price) + current.commission, 0)
+				const turnover = pos.trades.reduce((prev, current) => prev + (Math.abs(current.quantity) * current.price), 0)
 
 				if (!positions[i].closed) {
 					priceTotal += instrumentPortfolioPrice
@@ -164,10 +176,12 @@ export default {
 
 				positions[i].tradesCount = pos.trades.length
 				positions[i].priceTotal = parseFloat(priceTotal.toFixed(2))
+				positions[i].turnover = parseFloat(turnover.toFixed(2))
 				positions[i].durationMs = this.$dayjs(positions[i].closed).diff(positions[i].opened)
 				positions[i].durationHumanized = this.$dayjs.duration(positions[i].durationMs).humanize()
 				delete positions[i].trades
-				instrumentPriceTotal += priceTotal
+				instrumentTotalProfit += priceTotal
+				instrumentTotalTurnover += turnover
 			})
 			// всего открыто позиций
 			// сколько прибыльных позиций
@@ -181,7 +195,9 @@ export default {
 
 			return {
 				positions,
-				instrumentPriceTotal: instrumentPriceTotal.toFixed(2),
+				instrumentTotalProfit: instrumentTotalProfit.toFixed(2),
+				instrumentTotalTurnover: instrumentTotalTurnover.toFixed(2),
+				instrumentTotalROI: ((instrumentTotalProfit / instrumentTotalTurnover) * 100).toFixed(3),
 				closedTotal,
 				lossPositionsCount,
 				profitPositionsCount,
