@@ -147,8 +147,6 @@ export default {
 			let openedPositionCount = 0
 			let balance = 0
 
-			console.log(this.instrumentTrades)
-
 			this.instrumentTrades.forEach(trade => {
 				if (balance === 0) {
 					balance += trade.quantity

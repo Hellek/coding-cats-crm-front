@@ -45,7 +45,6 @@ export default {
 	watch: {
 		brokerAccountId: 'fetchOperations',
 		filter: {
-			immediate: true,
 			deep: true,
 			handler: 'fetchOperations',
 		},

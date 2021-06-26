@@ -7,7 +7,7 @@
 			v-loading="isAuthorizing || appUtilsLoading"
 			class="d-flex flex-column flex-grow"
 		>
-			<template v-if="isGettingNewToken || !isAuthorizing">
+			<template v-if="isGettingNewToken || (!isAuthorizing && !appUtilsLoading)">
 				<LayoutHeader/>
 				<LayoutMain/>
 			</template>
@@ -26,6 +26,11 @@ export default {
 		LayoutHeader: () => import('./LayoutHeader'),
 		LayoutMain: () => import('./LayoutMain'),
 	},
+	data() {
+		return {
+			appUtilsLoading: false,
+		}
+	},
 	computed: {
 		...mapState({
 			currentUser: state => state.users.user,
@@ -36,9 +41,6 @@ export default {
 			isGettingNewToken: state => state.auth.isGettingNewToken,
 			tokenRefresherIntervalId: state => state.auth.tokenRefresherIntervalId,
 		}),
-		appUtilsLoading() {
-			return this.isOperationsLoading || this.isAccountsLoading
-		},
 	},
 	watch: {
 		isAuthorized: {
@@ -62,6 +64,7 @@ export default {
 			if (!this.currentUser.TIRealToken && !this.currentUser.TISandboxToken) return
 
 			try {
+				this.appUtilsLoading = true
 				this.syncOperations()
 
 				await Promise.all([
@@ -71,6 +74,8 @@ export default {
 				])
 			} catch (error) {
 				this.$notifyUserAboutError(error)
+			} finally {
+				this.appUtilsLoading = false
 			}
 		},
 	},

@@ -14,21 +14,21 @@ export function toDateTimeFormat(value) {
 export function getSessionTime({ startOf = 'day', custom = null } = { startOf: 'day' }) {
 	const hour = dayjs().hour()
 	const showFinishedSession = hour < 7
-	const startOfDay = dayjs().startOf(startOf)
+	const startOfDay = dayjs().startOf('day')
 	const startOfTodaySession = startOfDay.add(showFinishedSession ? -1 : 0, 'day').hour(7)
 	const endOfTodaySession = startOfDay.add(showFinishedSession ? 0 : 1, 'day').hour(2)
 
 	if (custom === 'yesterday') {
 		return {
-			from: startOfTodaySession.subtract(1, 'day'),
-			to: endOfTodaySession.subtract(1, 'day'),
+			from: startOfTodaySession.subtract(1, 'day').format(),
+			to: endOfTodaySession.subtract(1, 'day').format(),
 		}
 	}
 
 	if (custom === 'all') {
 		return {
-			from: brokerEstablishDate,
-			to: endOfTodaySession,
+			from: brokerEstablishDate.format(),
+			to: endOfTodaySession.format(),
 		}
 	}
 
@@ -36,8 +36,8 @@ export function getSessionTime({ startOf = 'day', custom = null } = { startOf: '
 		const start = dayjs().startOf(startOf)
 
 		return {
-			from: start.add(showFinishedSession ? -1 : 0, 'day').hour(7),
-			to: endOfTodaySession,
+			from: start.add(showFinishedSession ? -1 : 0, 'day').hour(7).format(),
+			to: endOfTodaySession.format(),
 		}
 	}
 }

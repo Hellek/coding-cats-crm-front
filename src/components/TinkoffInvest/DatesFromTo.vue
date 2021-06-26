@@ -66,7 +66,9 @@ export default {
 		]),
 		operationDatesProxy: {
 			set(period) {
-				const [from, to] = period
+				let [from, to] = period
+				from = this.$dayjs(from).format()
+				to = this.$dayjs(to).format()
 				this.setFilterTime({ from, to })
 				this.setQuery({ from, to })
 			},
@@ -86,8 +88,8 @@ export default {
 			this.$router.replace({
 				query: {
 					...this.$route.query,
-					from: this.$dayjs(from).format(),
-					to: this.$dayjs(to).format(),
+					from,
+					to,
 				},
 			})
 		},
