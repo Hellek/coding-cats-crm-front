@@ -1,11 +1,11 @@
 import { http } from 'KitPlugins/http'
-import { getTodaySessionTime } from 'Utils'
+import { getSessionTime } from 'Utils'
 
 function defaultState() {
 	return {
 		brokerAccountId: localStorage.getItem('tinkoffInvest/brokerAccountId') || null,
 		filter: {
-			...getTodaySessionTime(),
+			...getSessionTime(),
 			figi: null,
 		},
 		isInstrumentsLoading: false,

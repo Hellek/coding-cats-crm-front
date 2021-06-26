@@ -6,15 +6,59 @@
 		format="dd.MM.yyyy HH:mm:ss"
 		range-separator="по"
 		:clearable="false"
+		:picker-options="pickerOptions"
 	/>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import { getUrlSearchParams, getTodaySessionTime } from 'Utils'
+import { getUrlSearchParams, getSessionTime } from 'Utils'
 
 export default {
 	name: 'DatesFromTo',
+	data() {
+		return {
+			pickerOptions: {
+				shortcuts: [{
+					text: 'Сегодня',
+					onClick(picker) {
+						const { from, to } = getSessionTime()
+						picker.$emit('pick', [from, to])
+					},
+				}, {
+					text: 'Вчера',
+					onClick(picker) {
+						const { from, to } = getSessionTime({ custom: 'yesterday' })
+						picker.$emit('pick', [from, to])
+					},
+				}, {
+					text: 'С начала недели',
+					onClick(picker) {
+						const { from, to } = getSessionTime({ startOf: 'week' })
+						picker.$emit('pick', [from, to])
+					},
+				}, {
+					text: 'С начала месяца',
+					onClick(picker) {
+						const { from, to } = getSessionTime({ startOf: 'month' })
+						picker.$emit('pick', [from, to])
+					},
+				}, {
+					text: 'С начала года',
+					onClick(picker) {
+						const { from, to } = getSessionTime({ startOf: 'year' })
+						picker.$emit('pick', [from, to])
+					},
+				}, {
+					text: 'За всё время',
+					onClick(picker) {
+						const { from, to } = getSessionTime({ custom: 'all' })
+						picker.$emit('pick', [from, to])
+					},
+				}],
+			},
+		}
+	},
 	computed: {
 		...mapState('tinkoffInvest', [
 			'brokerAccountId',
@@ -49,7 +93,7 @@ export default {
 		},
 		syncUrlAndStore() {
 			const query = getUrlSearchParams()
-			const defaultTime = getTodaySessionTime()
+			const defaultTime = getSessionTime()
 			const isDefaultTime = defaultTime.from === this.filter.from && defaultTime.to === this.filter.to
 
 			if (query.from && isDefaultTime) {
