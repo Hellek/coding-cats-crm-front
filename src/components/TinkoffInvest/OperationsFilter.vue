@@ -6,7 +6,7 @@
 
 		<FigiSelect
 			:value="filter.figi"
-			@input="setFilterFigi"
+			@input="setFilterFigiWrapper"
 		/>
 	</el-form>
 </template>
@@ -16,6 +16,7 @@ import Accounts from 'Components/TinkoffInvest/Accounts'
 import FigiSelect from 'Components/TinkoffInvest/FigiSelect'
 import DatesFromTo from 'Components/TinkoffInvest/DatesFromTo'
 import { mapState, mapMutations } from 'vuex'
+import { getUrlSearchParams } from 'Utils'
 
 import {
 	fetchOperations,
@@ -42,11 +43,27 @@ export default {
 			handler: 'fetchOperations',
 		},
 	},
+	created() {
+		this.syncUrlAndStore()
+	},
 	methods: {
 		fetchOperations,
 		...mapMutations({
 			setFilterFigi: 'tinkoffInvest/setFilterFigi',
 		}),
+		setFilterFigiWrapper(figi) {
+			this.setFilterFigi(figi)
+			this.$router.replace({ query: { ...this.$route.query, figi } })
+		},
+		syncUrlAndStore() {
+			const query = getUrlSearchParams()
+
+			if (query.figi && !this.filter.figi) {
+				this.setFilterFigi(query.figi)
+			} else if (this.filter.figi && !query.figi) {
+				this.$router.replace({ query: { ...this.$route.query, figi: this.filter.figi } })
+			}
+		},
 	},
 }
 </script>

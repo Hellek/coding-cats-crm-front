@@ -18,3 +18,8 @@ export function getTodaySessionTime() {
 		to: startOfDay.add(showFinishedSession ? 0 : 1, 'day').hour(2).format(),
 	}
 }
+
+export function getUrlSearchParams() {
+	const urlSearchParams = new URLSearchParams(window.location.search)
+	return Object.fromEntries(urlSearchParams.entries())
+}
