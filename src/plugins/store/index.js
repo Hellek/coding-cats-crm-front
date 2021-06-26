@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import auth from './modules/auth'
+import navs from './modules/navs'
 import roles from './modules/roles'
 import users from './modules/users'
 import tinkoffInvest from './modules/tinkoffInvest'
@@ -14,6 +15,7 @@ const store = new Vuex.Store({
 	strict: isDevelopment,
 	modules: {
 		auth,
+		navs,
 		roles,
 		users,
 		tinkoffInvest,
