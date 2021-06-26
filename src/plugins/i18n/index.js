@@ -16,7 +16,7 @@ export const instrumentTypeNames = {
 export const operationTypeNames = {
 	Buy: 'Покупка',
 	Sell: 'Продажа',
-	BuyCard: 'BuyCard',
+	BuyCard: 'Покупка с карты',
 	BrokerCommission: 'Комиссия за сделку',
 	ExchangeCommission: 'ExchangeCommission',
 	ServiceCommission: 'Комиссия сервиса',
@@ -24,7 +24,7 @@ export const operationTypeNames = {
 	OtherCommission: 'OtherCommission',
 	PayIn: 'Пополнение счёта',
 	PayOut: 'Вывод со счёта',
-	Tax: 'Tax',
+	Tax: 'Налоги',
 	TaxLucre: 'TaxLucre',
 	TaxDividend: 'Налог на дивиденды',
 	TaxCoupon: 'Налог на купон',
