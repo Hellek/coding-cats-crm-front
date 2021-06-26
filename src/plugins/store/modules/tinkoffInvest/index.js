@@ -12,6 +12,7 @@ function defaultState() {
 		isUsedFigiListLoading: false,
 		isOperationsLoading: false,
 		isAccountsLoading: false,
+		isPortfolioLoading: false,
 		instruments: {
 			stocks: [],
 			bonds: [],
@@ -20,6 +21,7 @@ function defaultState() {
 		},
 		operations: [],
 		accounts: [],
+		portfolio: {},
 		figiMap: {},
 		usedFigiList: [],
 	}
@@ -62,6 +64,9 @@ export default {
 		setAccounts(state, accounts) {
 			state.accounts = accounts
 		},
+		setPortfolio(state, portfolio) {
+			state.portfolio = portfolio
+		},
 		setFilterFigi(state, figi) {
 			state.filter.figi = figi
 		},
@@ -71,6 +76,9 @@ export default {
 		},
 		setIsAccountsLoading(state, isAccountsLoading) {
 			state.isAccountsLoading = isAccountsLoading
+		},
+		setIsPortfolioLoading(state, isPortfolioLoading) {
+			state.isPortfolioLoading = isPortfolioLoading
 		},
 		setFigiMap(state, figiMap) {
 			state.figiMap = figiMap
@@ -185,6 +193,26 @@ export default {
 			commit('setIsUsedFigiListLoading', true)
 			commit('setUsedFigiList', (await http.get('tinkoff-investments/used-instruments')).data)
 			commit('setIsUsedFigiListLoading', false)
+		},
+		async setPortfolio({ state, commit }) {
+			commit('setIsPortfolioLoading', true)
+
+			const { data } = await http.get('tinkoff-investments/portfolio', {
+				params: {
+					brokerAccountId: state.brokerAccountId,
+				},
+			})
+
+			commit('setPortfolio', data)
+			commit('setIsPortfolioLoading', false)
+		},
+		async fetchInstrumentPortfolio({ state }, figi) {
+			return (await http.get('tinkoff-investments/portfolio/instrument', {
+				params: {
+					brokerAccountId: state.brokerAccountId,
+					figi,
+				},
+			})).data
 		},
 	},
 }

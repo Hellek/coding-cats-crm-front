@@ -1,9 +1,8 @@
 <template>
-	<el-card v-loading="portfolioLoading">
+	<el-card v-loading="isPortfolioLoading">
 		<Accounts class="mb-5"/>
 
 		<el-table
-			v-if="brokerAccountId"
 			:data="portfolio.positions"
 			:fit="false"
 			stripe
@@ -52,7 +51,7 @@
 
 <script>
 import Accounts from 'Components/TinkoffInvest/Accounts'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { getCurrencySymbol } from 'Helpers/methods'
 
 export default {
@@ -60,15 +59,11 @@ export default {
 	components: {
 		Accounts,
 	},
-	data() {
-		return {
-			portfolioLoading: false,
-			portfolio: {},
-		}
-	},
 	computed: {
 		...mapState('tinkoffInvest', [
 			'brokerAccountId',
+			'isPortfolioLoading',
+			'portfolio',
 		]),
 	},
 	watch: {
@@ -79,23 +74,9 @@ export default {
 	},
 	methods: {
 		getCurrencySymbol,
-		async setPortfolio() {
-			if (!this.brokerAccountId) return
-
-			this.portfolioLoading = true
-
-			try {
-				this.portfolio = (await this.$http.get('tinkoff-investments/portfolio', {
-					params: {
-						brokerAccountId: this.brokerAccountId,
-					},
-				})).data
-			} catch (error) {
-				this.$notifyUserAboutError(error)
-			} finally {
-				this.portfolioLoading = false
-			}
-		},
+		...mapActions({
+			setPortfolio: 'tinkoffInvest/setPortfolio',
+		}),
 	},
 }
 </script>
