@@ -115,7 +115,7 @@ export default {
 			operations: state => state.tinkoffInvest.operations,
 		}),
 		buySellOperations() {
-			return this.operations.filter(o => ['Buy', 'Sell'].includes(o.operationType))
+			return this.operations.filter(o => ['Buy', 'BuyCard', 'Sell'].includes(o.operationType))
 		},
 		buySellOperationsPaginated() {
 			return this.buySellOperations

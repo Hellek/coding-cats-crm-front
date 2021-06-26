@@ -78,7 +78,7 @@ export default {
 		},
 		buySellNotDeclinedSortedOps() {
 			return this.operations
-				.filter(o => ['Buy', 'Sell'].includes(o.operationType))
+				.filter(o => ['Buy', 'BuyCard', 'Sell'].includes(o.operationType))
 				.filter(o => o.status !== 'Decline')
 				.sort((a, b) => a.id - b.id)
 				.map(o => {
