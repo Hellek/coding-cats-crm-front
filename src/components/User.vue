@@ -99,6 +99,15 @@
 			>{{ isCreationView ? 'Создать' : 'Сохранить' }}</el-button>
 
 			<el-button
+				v-if="hasRealTokenOnUserLoaded"
+				:loading="isSending"
+				type="danger"
+				plain
+				class="ml-4"
+				@click="removeOperations"
+			>Удалить все операции</el-button>
+
+			<el-button
 				v-if="!isCreationView && !isInitialUser"
 				:loading="isSending"
 				class="ml-4"
@@ -331,6 +340,28 @@ export default {
 
 				this.$notify.success({
 					title: 'Пользователь удален',
+				})
+			} catch (error) {
+				if (error === 'cancel') return
+				this.$notifyUserAboutError(error)
+			} finally {
+				this.isSending = false
+			}
+		},
+		async removeOperations() {
+			this.isSending = true
+
+			try {
+				await this.$confirm('Синхронизированные сделки будут удалены. Вы уверены?', {
+					confirmButtonText: 'Да',
+					cancelButtonText: 'Нет',
+					type: 'warning',
+				})
+
+				await this.$store.dispatch('tinkoffInvest/removeOperations')
+
+				this.$notify.success({
+					title: 'Сделки удалены',
 				})
 			} catch (error) {
 				if (error === 'cancel') return

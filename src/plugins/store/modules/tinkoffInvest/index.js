@@ -223,5 +223,9 @@ export default {
 				},
 			})).data
 		},
+		async removeOperations({ commit }) {
+			await http.delete('tinkoff-investments/operations')
+			commit('setOperations', [])
+		},
 	},
 }
