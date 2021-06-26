@@ -45,7 +45,7 @@
 
 <script>
 import OperationsFilter from 'Components/TinkoffInvest/OperationsFilter'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { dayjs } from 'KitPlugins/dayjs'
 import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -62,10 +62,16 @@ export default {
 	components: {
 		OperationsFilter,
 	},
+	data() {
+		return {
+			instrumentPortfolio: {},
+		}
+	},
 	computed: {
 		...mapState({
 			isOperationsLoading: state => state.tinkoffInvest.isOperationsLoading,
 			operations: state => state.tinkoffInvest.operations,
+			figi: state => state.tinkoffInvest.filter.figi,
 		}),
 		instrument() {
 			return {
@@ -116,8 +122,10 @@ export default {
 			return instrumentTrades
 		},
 		instrumentSeparatedTrades() {
+			const instrumentPortfolioPrice = this.instrumentPortfolio.balance ? (this.instrumentPortfolio.averagePositionPrice.value * this.instrumentPortfolio.balance) : 0
 			let instrumentPriceTotal = 0
 			const positions = []
+			let openedPositionCount = 0
 			let balance = 0
 
 			this.instrumentTrades.forEach(trade => {
@@ -137,7 +145,13 @@ export default {
 			})
 
 			positions.forEach((pos, i) => {
-				const priceTotal = -pos.trades.reduce((prev, current) => prev + (current.quantity * current.price) + current.commission, 0)
+				let priceTotal = -pos.trades.reduce((prev, current) => prev + (current.quantity * current.price) + current.commission, 0)
+
+				if (!positions[i].closed) {
+					priceTotal += instrumentPortfolioPrice
+					openedPositionCount = 1
+				}
+
 				positions[i].tradesCount = pos.trades.length
 				positions[i].priceTotal = parseFloat(priceTotal.toFixed(2))
 				positions[i].durationMs = this.$dayjs(positions[i].closed).diff(positions[i].opened)
@@ -151,7 +165,7 @@ export default {
 			// суммарная цена по убыточным позициям
 			// суммарная цена по прибыльным позициям
 
-			const closedTotal = positions.length
+			const closedTotal = positions.length - openedPositionCount
 			const lossPositionsCount = positions.reduce((prev, current) => ((current.priceTotal < 0) ? prev + 1 : prev), 0)
 			const profitPositionsCount = closedTotal - lossPositionsCount
 
@@ -163,6 +177,16 @@ export default {
 				profitPositionsCount,
 			}
 		},
+	},
+	watch: {
+		async figi(figi) {
+			this.instrumentPortfolio = await this.fetchInstrumentPortfolio(figi)
+		},
+	},
+	methods: {
+		...mapActions({
+			fetchInstrumentPortfolio: 'tinkoffInvest/fetchInstrumentPortfolio',
+		}),
 	},
 }
 </script>
