@@ -2,18 +2,14 @@
 	<div class="h-100p d-flex flex-column">
 		<OperationsFilter/>
 
-		<el-card
-			v-if="isOperationsLoading || operations.length"
-			v-loading="isOperationsLoading"
-			class="flex-grow"
-		>
+		<el-card class="flex-grow">
 			<template v-if="operations.length && !isOperationsLoading">
-				<div class="mb-3">
-					<span>{{ instrumentSeparatedTrades.instrumentPriceTotal >= 0 ? 'Доход' : 'Убыток' }}</span>
-					<span> по инструменту за всё время: {{ instrumentSeparatedTrades.instrumentPriceTotal }} {{ instrument.sign }}</span>
+				<div class="mb-3" :class="isResultProfitable ? 'color-success' : 'color-danger'">
+					<span>{{ isResultProfitable ? 'Доход' : 'Убыток' }}</span>
+					<span> по инструменту: {{ instrumentSeparatedTrades.instrumentPriceTotal }} {{ instrument.sign }}</span>
 				</div>
 
-				<div class="mb-3">Закрыто позиций за всё время {{ instrumentSeparatedTrades.closedTotal }}, убыточных {{ instrumentSeparatedTrades.lossPositionsCount }}, прибыльных {{ instrumentSeparatedTrades.profitPositionsCount }}</div>
+				<div class="mb-3">Закрыто позиций {{ instrumentSeparatedTrades.closedTotal }}, убыточных {{ instrumentSeparatedTrades.lossPositionsCount }}, прибыльных {{ instrumentSeparatedTrades.profitPositionsCount }}</div>
 
 				<el-table
 					:data="instrumentSeparatedTrades.positions"
@@ -76,6 +72,9 @@ export default {
 				currency: this.operations[0].currency,
 				sign: getCurrencySymbol(this.operations[0].currency),
 			}
+		},
+		isResultProfitable() {
+			return this.instrumentSeparatedTrades.instrumentPriceTotal >= 0
 		},
 		buySellNotDeclinedSortedOps() {
 			return this.operations
