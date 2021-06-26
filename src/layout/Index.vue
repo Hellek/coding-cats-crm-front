@@ -62,12 +62,13 @@ export default {
 			if (!this.currentUser.TIRealToken && !this.currentUser.TISandboxToken) return
 
 			try {
+				this.syncOperations()
+
 				await Promise.all([
 					this.$store.dispatch('tinkoffInvest/setAllInstuments'),
 					this.$store.dispatch('tinkoffInvest/setAccounts'),
+					this.$store.dispatch('tinkoffInvest/setUsedInstruments'),
 				])
-
-				this.syncOperations()
 			} catch (error) {
 				this.$notifyUserAboutError(error)
 			}

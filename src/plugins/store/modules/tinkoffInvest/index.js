@@ -9,6 +9,7 @@ function defaultState() {
 			figi: null,
 		},
 		isInstrumentsLoading: false,
+		isUsedFigiListLoading: false,
 		isOperationsLoading: false,
 		isAccountsLoading: false,
 		instruments: {
@@ -20,12 +21,21 @@ function defaultState() {
 		operations: [],
 		accounts: [],
 		figiMap: {},
+		usedFigiList: [],
 	}
 }
 
 export default {
 	namespaced: true,
 	state: defaultState(),
+	getters: {
+		usedInstrumentsFlat: state => [
+			...state.instruments.stocks.filter(i => state.usedFigiList.includes(i.figi)),
+			...state.instruments.bonds.filter(i => state.usedFigiList.includes(i.figi)),
+			...state.instruments.etfs.filter(i => state.usedFigiList.includes(i.figi)),
+			...state.instruments.currencies.filter(i => state.usedFigiList.includes(i.figi)),
+		],
+	},
 	mutations: {
 		setBrokerAccountId(state, brokerAccountId) {
 			state.brokerAccountId = brokerAccountId
@@ -40,8 +50,14 @@ export default {
 		setIsOperationsLoading(state, isOperationsLoading) {
 			state.isOperationsLoading = isOperationsLoading
 		},
+		setIsUsedFigiListLoading(state, isUsedFigiListLoading) {
+			state.isUsedFigiListLoading = isUsedFigiListLoading
+		},
 		setOperations(state, operations) {
 			state.operations = operations
+		},
+		setUsedFigiList(state, usedFigiList) {
+			state.usedFigiList = usedFigiList
 		},
 		setAccounts(state, accounts) {
 			state.accounts = accounts
@@ -164,6 +180,11 @@ export default {
 			} finally {
 				commit('setIsAccountsLoading', false)
 			}
+		},
+		async setUsedInstruments({ commit }) {
+			commit('setIsUsedFigiListLoading', true)
+			commit('setUsedFigiList', (await http.get('tinkoff-investments/used-instruments')).data)
+			commit('setIsUsedFigiListLoading', false)
 		},
 	},
 }

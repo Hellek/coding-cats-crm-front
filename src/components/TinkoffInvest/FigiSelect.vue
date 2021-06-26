@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
 	name: 'FigiSelect',
@@ -25,6 +25,10 @@ export default {
 		value: {
 			type: String,
 			default: null,
+		},
+		used: {
+			type: Boolean,
+			default: false,
 		},
 	},
 	data() {
@@ -37,7 +41,12 @@ export default {
 			'isInstrumentsLoading',
 			'instruments',
 		]),
+		...mapGetters('tinkoffInvest', [
+			'usedInstrumentsFlat',
+		]),
 		figiList() {
+			if (this.used) return this.usedInstrumentsFlat
+
 			return [
 				...this.instruments.stocks,
 				...this.instruments.bonds,

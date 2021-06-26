@@ -6,6 +6,7 @@
 
 		<FigiSelect
 			:value="filter.figi"
+			:used="used"
 			@input="setFilterFigiWrapper"
 		/>
 	</el-form>
@@ -28,6 +29,12 @@ export default {
 		Accounts,
 		FigiSelect,
 		DatesFromTo,
+	},
+	props: {
+		used: {
+			type: Boolean,
+			default: true,
+		},
 	},
 	computed: {
 		...mapState('tinkoffInvest', [
