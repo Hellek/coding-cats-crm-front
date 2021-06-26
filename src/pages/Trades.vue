@@ -5,9 +5,11 @@
 		<el-card class="flex-grow">
 			<template v-if="operations.length && !isOperationsLoading">
 				<div class="mb-3" :class="isResultProfitable ? 'color-success' : 'color-danger'">
-					<span>{{ isResultProfitable ? 'Доход' : 'Убыток' }}</span>
-					<span> по инструменту: {{ instrumentSeparatedTrades.instrumentTotalProfit }}{{ instrument.sign }}</span>
-					<div class="mt-3">Проторговано: {{ instrumentSeparatedTrades.instrumentTotalTurnover }}{{ instrument.sign }}</div>
+					<span>{{ isResultProfitable ? 'Прибыль' : 'Убыток' }}</span>
+					<span> по инструменту: {{ instrumentSeparatedTrades.instrumentTotalBalance }}{{ instrument.sign }}</span>
+					<div class="mt-3">Комиссия за сделки: {{ instrumentSeparatedTrades.instrumentTotalCommission }}{{ instrument.sign }}</div>
+					<div class="mt-3">Всего куплено: {{ instrumentSeparatedTrades.instrumentTotalPurchased }}{{ instrument.sign }}</div>
+					<div class="mt-3">Всего продано: {{ instrumentSeparatedTrades.instrumentTotalSold }}{{ instrument.sign }}</div>
 					<div class="mt-3">Эффективность: {{ instrumentSeparatedTrades.instrumentTotalROI }}%</div>
 				</div>
 
@@ -24,14 +26,26 @@
 					/>
 
 					<el-table-column
-						prop="turnover"
-						label="Оборот"
+						prop="purchased"
+						label="Куплено"
 						width="120px"
 					/>
 
 					<el-table-column
-						prop="priceTotal"
-						label="Итог"
+						prop="sold"
+						label="Продано"
+						width="120px"
+					/>
+
+					<el-table-column
+						prop="commission"
+						label="Комиссия"
+						width="120px"
+					/>
+
+					<el-table-column
+						prop="totalBalance"
+						label="Баланс"
 						width="120px"
 					/>
 
@@ -88,7 +102,7 @@ export default {
 			}
 		},
 		isResultProfitable() {
-			return this.instrumentSeparatedTrades.instrumentTotalProfit >= 0
+			return this.instrumentSeparatedTrades.instrumentTotalBalance >= 0
 		},
 		buySellNotDeclinedSortedOps() {
 			return this.operations
@@ -115,6 +129,7 @@ export default {
 			const instrumentTrades = []
 
 			this.buySellNotDeclinedSortedOps.forEach(ops => {
+				console.log(ops)
 				// Bugfix у валюты очень редко не бывает трейдов
 				if (ops.trades === null) {
 					instrumentTrades.push({
@@ -141,8 +156,10 @@ export default {
 		},
 		instrumentSeparatedTrades() {
 			const instrumentPortfolioPrice = this.instrumentPortfolio.balance ? (this.instrumentPortfolio.averagePositionPrice.value * this.instrumentPortfolio.balance) : 0
-			let instrumentTotalProfit = 0
-			let instrumentTotalTurnover = 0
+			let instrumentTotalBalance = 0
+			let instrumentTotalPurchased = 0
+			let instrumentTotalSold = 0
+			let instrumentTotalCommission = 0
 			const positions = []
 			let openedPositionCount = 0
 			let balance = 0
@@ -153,7 +170,7 @@ export default {
 					positions[positions.length] = {
 						opened: trade.date,
 						tradesCount: 0,
-						priceTotal: 0,
+						totalBalance: 0,
 						trades: [trade],
 					}
 				} else {
@@ -164,22 +181,31 @@ export default {
 			})
 
 			positions.forEach((pos, i) => {
-				let priceTotal = -pos.trades.reduce((prev, current) => prev + (current.quantity * current.price) + current.commission, 0)
-				const turnover = pos.trades.reduce((prev, current) => prev + (Math.abs(current.quantity) * current.price), 0)
+				let totalBalance = -pos.trades.reduce((prev, current) => prev + (current.quantity * current.price) - current.commission, 0)
+				const turnover = pos.trades.reduce((prev, current) => {
+					prev[current.quantity > 0 ? 'purchased' : 'sold'] -= (current.quantity * current.price)
+					prev.commission -= current.commission
+
+					return prev
+				}, { purchased: 0, sold: 0, commission: 0 })
 
 				if (!positions[i].closed) {
-					priceTotal += instrumentPortfolioPrice
+					totalBalance += instrumentPortfolioPrice
 					openedPositionCount = 1
 				}
 
 				positions[i].tradesCount = pos.trades.length
-				positions[i].priceTotal = parseFloat(priceTotal.toFixed(2))
-				positions[i].turnover = parseFloat(turnover.toFixed(2))
+				positions[i].totalBalance = parseFloat(totalBalance.toFixed(2))
+				positions[i].purchased = parseFloat(turnover.purchased.toFixed(2))
+				positions[i].sold = parseFloat(turnover.sold.toFixed(2))
+				positions[i].commission = parseFloat(turnover.commission.toFixed(2))
 				positions[i].durationMs = this.$dayjs(positions[i].closed).diff(positions[i].opened)
 				positions[i].durationHumanized = this.$dayjs.duration(positions[i].durationMs).humanize()
 				delete positions[i].trades
-				instrumentTotalProfit += priceTotal
-				instrumentTotalTurnover += turnover
+				instrumentTotalBalance += totalBalance
+				instrumentTotalPurchased += turnover.purchased
+				instrumentTotalSold += turnover.sold
+				instrumentTotalCommission += turnover.commission
 			})
 			// всего открыто позиций
 			// сколько прибыльных позиций
@@ -188,14 +214,16 @@ export default {
 			// суммарная цена по прибыльным позициям
 
 			const closedTotal = positions.length - openedPositionCount
-			const lossPositionsCount = positions.reduce((prev, current) => ((current.priceTotal < 0) ? prev + 1 : prev), 0)
+			const lossPositionsCount = positions.reduce((prev, current) => ((current.totalBalance < 0) ? prev + 1 : prev), 0)
 			const profitPositionsCount = closedTotal - lossPositionsCount
 
 			return {
 				positions,
-				instrumentTotalProfit: instrumentTotalProfit.toFixed(2),
-				instrumentTotalTurnover: instrumentTotalTurnover.toFixed(2),
-				instrumentTotalROI: ((instrumentTotalProfit / instrumentTotalTurnover) * 100).toFixed(3),
+				instrumentTotalBalance: instrumentTotalBalance.toFixed(2),
+				instrumentTotalPurchased: instrumentTotalPurchased.toFixed(2),
+				instrumentTotalSold: instrumentTotalSold.toFixed(2),
+				instrumentTotalCommission: instrumentTotalCommission.toFixed(2),
+				instrumentTotalROI: ((instrumentTotalBalance / Math.abs(instrumentTotalPurchased)) * 100).toFixed(3),
 				closedTotal,
 				lossPositionsCount,
 				profitPositionsCount,

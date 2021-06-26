@@ -1,6 +1,6 @@
 import { dayjs } from 'KitPlugins/dayjs'
 
-export const brokerEstablishDate = dayjs('2016-01-01').toISOString()
+export const brokerEstablishDate = dayjs('2016-01-01').format()
 
 export function toDateFormat(value) {
 	return dayjs(value).format('DD.MM.YYYY')
@@ -27,7 +27,7 @@ export function getSessionTime({ startOf = 'day', custom = null } = { startOf: '
 
 	if (custom === 'all') {
 		return {
-			from: brokerEstablishDate.format(),
+			from: brokerEstablishDate,
 			to: endOfTodaySession.format(),
 		}
 	}
