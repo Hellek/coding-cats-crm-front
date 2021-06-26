@@ -107,16 +107,26 @@ export default {
 			const instrumentTrades = []
 
 			this.buySellNotDeclinedSortedOps.forEach(ops => {
-				ops.trades.forEach(trade => {
-					const commission = ops.commission ? ((ops.commission.value / ops.quantityExecuted) * trade.quantity) : 0
-
+				// Bugfix у валюты очень редко не бывает трейдов
+				if (ops.trades === null) {
 					instrumentTrades.push({
-						date: trade.date,
-						quantity: (ops.operationType === 'Buy') ? trade.quantity : -trade.quantity,
-						price: trade.price,
-						commission,
+						date: ops.date,
+						quantity: (ops.operationType === 'Buy' || ops.operationType === 'BuyCard') ? ops.quantityExecuted : -ops.quantityExecuted,
+						price: ops.price,
+						commission: ops.commission.value,
 					})
-				})
+				} else {
+					ops.trades.forEach(trade => {
+						const commission = ops.commission ? ((ops.commission.value / ops.quantityExecuted) * trade.quantity) : 0
+
+						instrumentTrades.push({
+							date: trade.date,
+							quantity: (ops.operationType === 'Buy' || ops.operationType === 'BuyCard') ? trade.quantity : -trade.quantity,
+							price: trade.price,
+							commission,
+						})
+					})
+				}
 			})
 
 			return instrumentTrades
