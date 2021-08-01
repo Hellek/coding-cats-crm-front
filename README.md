@@ -10,3 +10,6 @@
 ### Перед коммитом прогоняем линтерами
 `npm run lint`
 `npm run lint:style`
+
+### Deploy
+`on master push`
